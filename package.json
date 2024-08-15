@@ -1,0 +1,41 @@
+{
+  "name": "plain-shiki",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [
+    "shiki",
+    "highlight",
+    "plaintext"
+  ],
+  "author": "KazariEX",
+  "repository": "KazariEX/plain-shiki",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup-node",
+    "dev": "tsup-node --watch"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.25.2",
+    "@types/node": "^22.3.0",
+    "@zinkawaii/eslint-config": "^0.1.4",
+    "eslint": "^9.9.0",
+    "tsup": "^8.2.4"
+  },
+  "dependencies": {
+    "shiki": "^1.13.0"
+  }
+}
