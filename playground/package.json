@@ -1,9 +1,14 @@
 {
   "private": true,
   "scripts": {
+    "build": "vite build",
     "dev": "vite"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.2",
     "vite": "^5.4.1"
+  },
+  "dependencies": {
+    "vue": "^3.4.38"
   }
 }
