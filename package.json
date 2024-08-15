@@ -26,6 +26,7 @@
   ],
   "scripts": {
     "build": "tsup-node",
+    "build:playground": "pnpm -C playground run build",
     "dev": "tsup-node --watch"
   },
   "devDependencies": {
