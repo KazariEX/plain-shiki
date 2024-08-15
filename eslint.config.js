@@ -15,6 +15,6 @@ export default antfu({
         ...zin.recommended,
         ...zin.stylistic,
         ...zin.patch,
-        "no-multi-assign": "off"
+        "no-return-assign": "off"
     }
 });
