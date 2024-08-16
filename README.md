@@ -1,6 +1,6 @@
 # Plain Shiki
 
-Highlight your plaintext in any container via [Shiki]!
+Highlight your plaintext in any container via [Shiki].
 
 ## Installation
 
