@@ -1,16 +1,3 @@
-# Plain Shiki
-
-Highlight your plaintext in any container via [Shiki]!
-
-## Installation
-
-```bash
-pnpm i plain-shiki
-```
-
-## Usage
-
-```ts
 import { createHighlighter } from "shiki";
 import { createPlainShiki } from "plain-shiki";
 
@@ -28,6 +15,3 @@ createPlainShiki(shiki).mount(el, {
         dark: "vitesse-dark"
     }
 });
-```
-
-[Shiki]: https://shiki.style

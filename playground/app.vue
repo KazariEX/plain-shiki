@@ -1,11 +1,18 @@
 <script lang="ts" setup>
+    import { createHighlighter } from "shiki";
     import { onMounted, ref } from "vue";
     import { createPlainShiki } from "../src";
+    import example from "./assets/example.ts?raw";
 
     const el = ref<HTMLElement>();
 
-    onMounted(() => {
-        createPlainShiki(el.value!, {
+    onMounted(async () => {
+        const shiki = await createHighlighter({
+            langs: ["html", "css", "js", "ts"],
+            themes: ["vitesse-light", "vitesse-dark"]
+        });
+
+        createPlainShiki(shiki).mount(el.value!, {
             lang: "ts",
             themes: {
                 light: "vitesse-light",
@@ -13,23 +20,10 @@
             }
         });
     });
-
-    const initialCode = /* TS */
-`import { createPlainShiki } from "plain-shiki";
-
-const el = document.querySelector(".plain-shiki") as HTMLElement;
-
-createPlainShiki(el, {
-    lang: "ts",
-    themes: {
-        light: "vitesse-light",
-        dark: "vitesse-dark"
-    }
-});`;
 </script>
 
 <template>
-    <div ref="el" class="plain-shiki" contenteditable="plaintext-only" v-html="initialCode"></div>
+    <div ref="el" class="plain-shiki" contenteditable="plaintext-only" v-html="example"></div>
 </template>
 
 <style>
