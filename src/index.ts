@@ -1,4 +1,4 @@
-import type { BundledLanguage, BundledTheme, ThemedTokenWithVariants, createHighlighter } from "shiki";
+import type { BundledLanguage, BundledTheme, CodeToTokensWithThemesOptions, HighlighterGeneric, ThemedTokenWithVariants } from "shiki";
 import { debounce } from "./utils";
 
 export interface MountPlainShikiOptions {
@@ -14,7 +14,7 @@ export interface MountPlainShikiOptions {
      *
      * @default {light:"min-light",dark:"min-dark"}
      */
-    themes?: Record<string, BundledTheme>;
+    themes?: CodeToTokensWithThemesOptions<BundledLanguage, BundledTheme>["themes"];
 
     /**
      * @description Root element selector corresponding to the theme.
@@ -38,7 +38,7 @@ export interface MountPlainShikiOptions {
     delay?: number;
 }
 
-type Highlighter = Awaited<ReturnType<typeof createHighlighter>>;
+type Highlighter = HighlighterGeneric<BundledLanguage, BundledTheme>;
 
 interface ColorLoads {
     token: ThemedTokenWithVariants;
