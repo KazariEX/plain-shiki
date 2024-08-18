@@ -61,18 +61,23 @@ export function createPlainShiki(shiki: Highlighter) {
         } = options;
 
         const debouncedUpdate = debounce(update, { delay });
-        const dispose = () => el.removeEventListener("input", debouncedUpdate);
-
-        if (isSupported() && watch) {
-            el.addEventListener("input", debouncedUpdate);
-        }
 
         const stylesheet = new CSSStyleSheet();
         document.adoptedStyleSheets.push(stylesheet);
 
         const colorRanges = new Map<string, Range[]>();
 
-        isSupported() && update();
+        if (isSupported()) {
+            watch && el.addEventListener("input", debouncedUpdate);
+            update();
+        }
+
+        function dispose() {
+            watch && el.removeEventListener("input", debouncedUpdate);
+
+            const idx = document.adoptedStyleSheets.indexOf(stylesheet);
+            document.adoptedStyleSheets.splice(idx, 1);
+        }
 
         function patch(loads: ColorLoads[]) {
             const deleted = new Set<string>();
