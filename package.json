@@ -29,14 +29,14 @@
     "build:playground": "pnpm -C playground run build",
     "dev": "tsup-node --watch"
   },
-  "devDependencies": {
-    "@antfu/eslint-config": "^2.25.2",
-    "@types/node": "^22.3.0",
-    "@zinkawaii/eslint-config": "^0.1.4",
-    "eslint": "^9.9.0",
-    "tsup": "^8.2.4"
-  },
   "dependencies": {
-    "shiki": "^1.13.0"
+    "shiki": "^1.18.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^3.7.1",
+    "@types/node": "^22.5.5",
+    "@zinkawaii/eslint-config": "^0.1.7",
+    "eslint": "^9.11.0",
+    "tsup": "^8.3.0"
   }
 }
