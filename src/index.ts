@@ -1,4 +1,4 @@
-import type { BundledLanguage, BundledTheme, CodeToTokensWithThemesOptions, HighlighterGeneric, ThemedTokenWithVariants } from "shiki";
+import type { BundledLanguage, BundledTheme, CodeToTokensWithThemesOptions, HighlighterCore, ThemedTokenWithVariants } from "shiki";
 import { debounce } from "./utils";
 
 export interface MountPlainShikiOptions {
@@ -38,14 +38,14 @@ export interface MountPlainShikiOptions {
     delay?: number;
 }
 
-type Highlighter = HighlighterGeneric<BundledLanguage, BundledTheme>;
+export type CreatePlainShikiReturns = ReturnType<typeof createPlainShiki>;
 
 interface ColorLoads {
     token: ThemedTokenWithVariants;
     range: Range;
 }
 
-export function createPlainShiki(shiki: Highlighter) {
+export function createPlainShiki(shiki: HighlighterCore) {
     const isSupported = () => "CSS" in globalThis && "highlights" in CSS;
 
     function mount(el: HTMLElement, options: MountPlainShikiOptions) {
