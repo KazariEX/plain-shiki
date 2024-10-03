@@ -3,7 +3,8 @@ export default defineNuxtConfig({
         head: {
             link: [
                 { rel: "icon", href: "https://shiki.style/logo.svg" }
-            ]
+            ],
+            title: "Plain Shiki"
         }
     },
     css: [
