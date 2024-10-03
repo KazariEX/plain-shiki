@@ -23,7 +23,7 @@
 </script>
 
 <template>
-    <div ref="el" class="plain-shiki" contenteditable="plaintext-only" v-html="example"></div>
+    <div ref="el" class="plain-shiki" contenteditable v-html="example"></div>
 </template>
 
 <style>
@@ -31,10 +31,11 @@
         padding: 0.5rem 0.75rem;
         border: 1px solid #ccc;
         border-radius: 4px;
+        outline: none;
         font-family: monospace;
         font-size: 16px;
         line-height: 1.5;
-        outline: none;
+        white-space: break-spaces;
         resize: none;
     }
 </style>

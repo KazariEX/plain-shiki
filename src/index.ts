@@ -118,9 +118,16 @@ export function createPlainShiki(shiki: HighlighterCore) {
         }
 
         function update() {
-            const childNodes = el.childNodes;
-            const textContent = [...childNodes].map((node) => node.textContent).join("");
-            const tokenLines = shiki.codeToTokensWithThemes(textContent, {
+            const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+
+            const textNodes: Node[] = [];
+            let node;
+            while (node = walker.nextNode()) {
+                textNodes.push(node);
+            }
+
+            const { innerText } = el;
+            const tokenLines = shiki.codeToTokensWithThemes(innerText, {
                 lang,
                 themes
             });
@@ -128,30 +135,35 @@ export function createPlainShiki(shiki: HighlighterCore) {
             const loads: ColorLoads[] = [];
             for (const tokens of tokenLines) {
                 for (const token of tokens) {
-                    const [node, offset] = findNodeAndOffset(token.offset);
+                    const [startNode, startOffset] = findNodeAndOffset(token.offset);
+                    const [endNode, endOffset] = findNodeAndOffset(token.offset + token.content.length);
+
                     const range = document.createRange();
-                    range.setStart(node, offset);
-                    range.setEnd(node, offset + token.content.length);
+                    range.setStart(startNode, startOffset);
+                    range.setEnd(endNode, endOffset);
 
                     loads.push({ token, range });
                 }
             }
             patch(loads);
 
-            // @ts-expect-error 函数缺少结束 return 语句，返回类型不包括 "undefined"。
-            function findNodeAndOffset(tokenOffset: number): [Node, number] {
+            function findNodeAndOffset(tokenOffset: number) {
                 let offset = 0;
-                for (const node of childNodes) {
-                    if (!node.textContent) {
+                for (const node of textNodes) {
+                    const { textContent } = node;
+                    if (!textContent) {
                         continue;
                     }
-                    if (offset + node.textContent.length > tokenOffset) {
-                        return [node, tokenOffset - offset];
+                    offset = innerText.indexOf(textContent, offset);
+
+                    if (offset + textContent.length >= tokenOffset) {
+                        return [node, tokenOffset - offset] as const;
                     }
                     else {
-                        offset += node.textContent.length;
+                        offset += textContent.length;
                     }
                 }
+                throw new RangeError();
             }
         }
 

@@ -14,7 +14,9 @@ export default antfu({
         ...zin.standard,
         ...zin.recommended,
         ...zin.stylistic,
+        ...zin.vue,
         ...zin.patch,
-        "no-return-assign": "off"
+        "no-return-assign": "off",
+        "unicorn/prefer-dom-node-text-content": "off"
     }
 });
