@@ -2,6 +2,8 @@
 
 Highlight your plaintext in any container via [Shiki].
 
+By using the CSS Custom Highlight API, code can be highlighted on plain text nodes without rich text. It will help you get the lightest code editor.
+
 ## Installation
 
 ```bash
