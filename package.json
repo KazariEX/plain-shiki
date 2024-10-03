@@ -36,7 +36,9 @@
     "@antfu/eslint-config": "^3.7.3",
     "@types/node": "^22.7.4",
     "@zinkawaii/eslint-config": "^0.1.7",
+    "@zinkawaii/stylelint-config": "^0.1.5",
     "eslint": "^9.11.1",
+    "stylelint": "^16.9.0",
     "tsup": "^8.3.0"
   }
 }
