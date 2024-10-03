@@ -163,7 +163,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
                         offset += textContent.length;
                     }
                 }
-                throw new RangeError();
+                throw new RangeError(`[Plain Shiki] cannot find node at offset ${tokenOffset}.`);
             }
         }
 

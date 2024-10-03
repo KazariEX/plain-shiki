@@ -1,17 +1,20 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "lib": [
       "ESNext",
       "DOM",
       "DOM.Iterable"
     ],
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "target": "ESNext",
     "allowJs": true,
-    "esModuleInterop": true,
     "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "module": "Preserve",
+    "noEmit": true,
     "strict": true
   },
   "include": [

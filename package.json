@@ -26,7 +26,7 @@
   ],
   "scripts": {
     "build": "tsup-node",
-    "build:playground": "pnpm -C playground run build",
+    "build:playground": "pnpm -C playground run generate",
     "dev": "tsup-node --watch",
     "release": "bumpp --no-push -c \"release: v%s\""
   },

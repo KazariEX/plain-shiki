@@ -13,8 +13,8 @@ pnpm i plain-shiki
 ## Usage
 
 ```ts
-import { createHighlighter } from "shiki";
 import { createPlainShiki } from "plain-shiki";
+import { createHighlighter } from "shiki";
 
 const shiki = await createHighlighter({
     langs: ["html", "css", "js", "ts"],
