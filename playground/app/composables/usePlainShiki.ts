@@ -31,4 +31,8 @@ export default function(el: MaybeRefOrGetter<HTMLElement | null>, options: UsePl
         plain = createPlainShiki(shiki);
         trigger();
     });
+
+    tryOnUnmounted(() => {
+        ctx?.dispose();
+    });
 }
