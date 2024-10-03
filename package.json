@@ -27,7 +27,8 @@
   "scripts": {
     "build": "tsup-node",
     "build:playground": "pnpm -C playground run build",
-    "dev": "tsup-node --watch"
+    "dev": "tsup-node --watch",
+    "release": "bumpp --no-push -c \"release: v%s\""
   },
   "dependencies": {
     "shiki": "^1.21.0"
@@ -37,6 +38,7 @@
     "@types/node": "^22.7.4",
     "@zinkawaii/eslint-config": "^0.1.7",
     "@zinkawaii/stylelint-config": "^0.1.5",
+    "bumpp": "^9.6.1",
     "eslint": "^9.11.1",
     "stylelint": "^16.9.0",
     "tsup": "^8.3.0"
