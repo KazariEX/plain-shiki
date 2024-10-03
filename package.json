@@ -30,13 +30,13 @@
     "dev": "tsup-node --watch"
   },
   "dependencies": {
-    "shiki": "^1.18.0"
+    "shiki": "^1.21.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^3.7.1",
-    "@types/node": "^22.5.5",
+    "@antfu/eslint-config": "^3.7.3",
+    "@types/node": "^22.7.4",
     "@zinkawaii/eslint-config": "^0.1.7",
-    "eslint": "^9.11.0",
+    "eslint": "^9.11.1",
     "tsup": "^8.3.0"
   }
 }
