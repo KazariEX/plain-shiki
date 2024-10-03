@@ -25,7 +25,7 @@ export default function(el: MaybeRefOrGetter<HTMLElement | null>, options: UsePl
     tryOnMounted(async () => {
         const shiki = await createHighlighter({
             langs: ["html", "css", "js", "ts"],
-            themes: ["vitesse-light", "vitesse-dark"]
+            themes: Object.values(options.themes ?? {}).filter((theme) => theme !== void 0)
         });
 
         plain = createPlainShiki(shiki);
