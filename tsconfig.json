@@ -18,8 +18,7 @@
     "strict": true
   },
   "include": [
-    "./src/**/*.ts",
-    "./playground/**/*.ts"
+    "./src/**/*.ts"
   ],
   "exclude": [
     "./dist"
