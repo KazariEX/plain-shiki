@@ -65,7 +65,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
         const stylesheet = new CSSStyleSheet();
         document.adoptedStyleSheets.push(stylesheet);
 
-        const colorRanges = new Map<string, Range[]>();
+        const names = new Set<string>();
 
         if (isSupported()) {
             watch && el.addEventListener("input", debouncedUpdate);
@@ -80,7 +80,10 @@ export function createPlainShiki(shiki: HighlighterCore) {
         }
 
         function patch(loads: ColorLoads[]) {
-            const deleted = new Set<string>();
+            for (const name of names) {
+                const highlight = CSS.highlights.get(name);
+                highlight?.clear();
+            }
 
             for (const { token, range } of loads) {
                 for (const theme in token.variants) {
@@ -94,25 +97,15 @@ export function createPlainShiki(shiki: HighlighterCore) {
                         highlight.priority = isDefault ? 0 : 1;
                     }
 
-                    let ranges = colorRanges.get(name);
-                    if (!ranges) {
+                    if (!names.has(name)) {
                         const rule = `${
                             isDefault ? ":root" : selector(theme)
                         }::highlight(${name}) { color: ${color}; }`;
                         stylesheet.insertRule(rule);
-                        colorRanges.set(name, ranges = []);
-                    }
-
-                    if (!deleted.has(name)) {
-                        deleted.add(name);
-                        for (const range of ranges) {
-                            highlight.delete(range);
-                        }
-                        ranges.length = 0;
+                        names.add(name);
                     }
 
                     highlight.add(range);
-                    ranges.push(range);
                 }
             }
         }
