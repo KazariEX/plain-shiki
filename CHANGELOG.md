@@ -1,3 +1,15 @@
+## 0.0.6 (2024-10-06)
+
+### Perf
+
+- reduce the time complexity of finding node and offset
+
+- don't wrap `update` with `debounce` when delay is zero
+
+### Bug Fixes
+
+- clear ranges in advance
+
 ## 0.0.5 (2024-10-04)
 
 ### Features
