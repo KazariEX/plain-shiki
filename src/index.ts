@@ -60,7 +60,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
             delay = 0
         } = options;
 
-        const debouncedUpdate = debounce(update, { delay });
+        const debouncedUpdate = delay > 0 ? debounce(update, { delay }) : update;
 
         const stylesheet = new CSSStyleSheet();
         document.adoptedStyleSheets.push(stylesheet);
