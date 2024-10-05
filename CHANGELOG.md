@@ -1,3 +1,9 @@
+## 0.0.7 (2024-10-06)
+
+### Perf
+
+- support parsing and caching line by line based on shiki grammar state
+
 ## 0.0.6 (2024-10-06)
 
 ### Perf
