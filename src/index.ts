@@ -125,8 +125,9 @@ export function createPlainShiki(shiki: HighlighterCore) {
                 themes
             });
 
-            let offset = 0;
             let i = 0;
+            let offset = 0;
+            let isCorrect = false;
 
             const loads: ColorLoads[] = [];
             for (const tokens of tokenLines) {
@@ -150,13 +151,18 @@ export function createPlainShiki(shiki: HighlighterCore) {
                     if (!textContent) {
                         continue;
                     }
-                    offset = innerText.indexOf(textContent, offset);
+
+                    if (!isCorrect) {
+                        offset = innerText.indexOf(textContent, offset);
+                        isCorrect = true;
+                    }
 
                     if (offset + textContent.length >= tokenOffset) {
                         return [node, tokenOffset - offset] as const;
                     }
                     else {
                         offset += textContent.length;
+                        isCorrect = false;
                     }
                 }
                 throw new RangeError(`[Plain Shiki] cannot find node at offset ${tokenOffset}.`);
