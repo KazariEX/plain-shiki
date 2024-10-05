@@ -125,6 +125,9 @@ export function createPlainShiki(shiki: HighlighterCore) {
                 themes
             });
 
+            let offset = 0;
+            let i = 0;
+
             const loads: ColorLoads[] = [];
             for (const tokens of tokenLines) {
                 for (const token of tokens) {
@@ -141,8 +144,8 @@ export function createPlainShiki(shiki: HighlighterCore) {
             patch(loads);
 
             function findNodeAndOffset(tokenOffset: number) {
-                let offset = 0;
-                for (const node of textNodes) {
+                for (; i < textNodes.length; i++) {
+                    const node = textNodes[i];
                     const { textContent } = node;
                     if (!textContent) {
                         continue;
