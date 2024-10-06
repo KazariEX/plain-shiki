@@ -84,6 +84,10 @@ export function createPlainShiki(shiki: HighlighterCore) {
 
             const idx = document.adoptedStyleSheets.indexOf(stylesheet);
             document.adoptedStyleSheets.splice(idx, 1);
+
+            for (const name of names) {
+                CSS.highlights.delete(name);
+            }
         }
 
         function resolveName(theme: string, color: string) {
