@@ -29,6 +29,7 @@
     "build": "tsup-node",
     "build:playground": "pnpm -C playground run generate",
     "dev": "tsup-node --watch",
+    "prepack": "pnpm run build",
     "release": "bumpp --no-push -c \"release: v%s\"",
     "test": "vitest"
   },
