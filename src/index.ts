@@ -135,6 +135,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
                 const tokenResult = shiki.codeToTokens(text, {
                     lang,
                     themes,
+                    cssVariablePrefix: "",
                     defaultColor: false,
                     grammarState: loadLines[i - 1]?.lastGrammarState
                 });
@@ -183,21 +184,15 @@ export function createPlainShiki(shiki: HighlighterCore) {
     };
 }
 
-function resolveName(varName: string, color: string) {
-    const theme = varName.slice("--shiki-".length);
-    const name = `shiki-${theme}-${color.slice(1).toLowerCase()}`;
-    return [theme, name];
-}
-
 function* walkTokens(loads: ColorLoad[]) {
     for (const { token, range } of loads) {
         if (typeof token.htmlStyle !== "object") {
             continue;
         }
 
-        for (const varName in token.htmlStyle) {
-            const color = token.htmlStyle[varName];
-            const [theme, name] = resolveName(varName, color);
+        for (const theme in token.htmlStyle) {
+            const color = token.htmlStyle[theme];
+            const name = `shiki-${theme}-${color.slice(1).toLowerCase()}`;
 
             yield { range, color, theme, name };
         }
