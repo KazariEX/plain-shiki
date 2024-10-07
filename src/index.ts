@@ -81,59 +81,33 @@ export function createPlainShiki(shiki: HighlighterCore) {
             }
         }
 
-        function resolveName(varName: string, color: string) {
-            const theme = varName.slice("--shiki-".length);
-            const name = `shiki-${theme}-${color.slice(1).toLowerCase()}`;
-            return {
-                name,
-                theme
-            };
-        }
-
         function patch(loads: ColorLoad[], oldLoads: ColorLoad[]) {
-            for (const { token, range } of oldLoads) {
-                if (typeof token.htmlStyle !== "object") {
+            for (const { range, name } of walkTokens(oldLoads)) {
+                const highlight = CSS.highlights.get(name);
+                if (!highlight) {
                     continue;
                 }
-
-                for (const varName in token.htmlStyle) {
-                    const color = token.htmlStyle[varName];
-                    const { name } = resolveName(varName, color);
-
-                    const highlight = CSS.highlights.get(name);
-                    if (!highlight) {
-                        continue;
-                    }
-                    highlight.delete(range);
-                }
+                highlight?.delete(range);
             }
 
-            for (const { token, range } of loads) {
-                if (typeof token.htmlStyle !== "object") {
-                    continue;
+            for (const { range, color, theme, name } of walkTokens(loads)) {
+                const isDefault = theme === "light";
+
+                let highlight = CSS.highlights.get(name);
+                if (!highlight) {
+                    CSS.highlights.set(name, highlight = new Highlight());
+                    highlight.priority = isDefault ? 0 : 1;
                 }
 
-                for (const varName in token.htmlStyle) {
-                    const color = token.htmlStyle[varName];
-                    const { name, theme } = resolveName(varName, color);
-                    const isDefault = theme === "light";
-
-                    let highlight = CSS.highlights.get(name);
-                    if (!highlight) {
-                        CSS.highlights.set(name, highlight = new Highlight());
-                        highlight.priority = isDefault ? 0 : 1;
-                    }
-
-                    if (!names.has(name)) {
-                        const rule = `${
-                            isDefault ? ":root" : selector(theme)
-                        }::highlight(${name}) { color: ${color}; }`;
-                        stylesheet.insertRule(rule);
-                        names.add(name);
-                    }
-
-                    highlight.add(range);
+                if (!names.has(name)) {
+                    const rule = `${
+                        isDefault ? ":root" : selector(theme)
+                    }::highlight(${name}) { color: ${color}; }`;
+                    stylesheet.insertRule(rule);
+                    names.add(name);
                 }
+
+                highlight.add(range);
             }
         }
 
@@ -153,7 +127,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
             loadLines.push(...chunk);
 
             let offset = textLines.slice(0, start).reduce((res, text) => res + text.length + 1, 0);
-            const findNodeAndOffset = createNodeAndOffsetFind(innerText, textNodes, offset);
+            const findNodeAndOffset = createFindNodeAndOffset(innerText, textNodes, offset);
 
             for (let i = start; i < textLines.length; i++) {
                 const text = textLines[i];
@@ -209,6 +183,27 @@ export function createPlainShiki(shiki: HighlighterCore) {
     };
 }
 
+function resolveName(varName: string, color: string) {
+    const theme = varName.slice("--shiki-".length);
+    const name = `shiki-${theme}-${color.slice(1).toLowerCase()}`;
+    return [theme, name];
+}
+
+function* walkTokens(loads: ColorLoad[]) {
+    for (const { token, range } of loads) {
+        if (typeof token.htmlStyle !== "object") {
+            continue;
+        }
+
+        for (const varName in token.htmlStyle) {
+            const color = token.htmlStyle[varName];
+            const [theme, name] = resolveName(varName, color);
+
+            yield { range, color, theme, name };
+        }
+    }
+}
+
 function collectTextNodes(el: HTMLElement) {
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     const textNodes: Text[] = [];
@@ -220,7 +215,7 @@ function collectTextNodes(el: HTMLElement) {
     return textNodes;
 }
 
-function createNodeAndOffsetFind(innerText: string, textNodes: Text[], initialOffset: number) {
+function createFindNodeAndOffset(innerText: string, textNodes: Text[], initialOffset: number) {
     let i = 0;
     let offset = 0;
     let isCorrect = false;
