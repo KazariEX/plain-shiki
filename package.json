@@ -32,9 +32,6 @@
     "release": "bumpp --no-push -c \"release: v%s\"",
     "test": "vitest"
   },
-  "dependencies": {
-    "shiki": "^1.22.0"
-  },
   "devDependencies": {
     "@antfu/eslint-config": "^3.7.3",
     "@types/node": "^22.7.4",
@@ -42,8 +39,12 @@
     "@zinkawaii/stylelint-config": "^0.1.5",
     "bumpp": "^9.6.1",
     "eslint": "^9.12.0",
+    "shiki": "^1.22.0",
     "stylelint": "^16.9.0",
     "tsup": "^8.3.0",
     "vitest": "^2.1.2"
+  },
+  "peerDependencies": {
+    "shiki": "^1.22.0"
   }
 }
