@@ -1,3 +1,13 @@
+## 0.0.9 (2024-10-08)
+
+### Bug Fixes
+
+- delete ranges instead of highlights
+
+- avoid deleting external stylesheet
+
+- avoid running `dispose` multiple times
+
 ## 0.0.8 (2024-10-07)
 
 ### Features
