@@ -74,7 +74,9 @@ export function createPlainShiki(shiki: HighlighterCore) {
             watch && el.removeEventListener("input", debouncedUpdate);
 
             const idx = document.adoptedStyleSheets.indexOf(stylesheet);
-            document.adoptedStyleSheets.splice(idx, 1);
+            if (idx !== -1) {
+                document.adoptedStyleSheets.splice(idx, 1);
+            }
 
             for (const [name, ranges] of colorRanges) {
                 const highlight = CSS.highlights.get(name);
