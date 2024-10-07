@@ -1,12 +1,22 @@
+## 0.0.8 (2024-10-07)
+
+### Features
+
+- calc edit diff for better rerenderring
+
+### Bug Fixes
+
+- delete highlights when disposing
+
 ## 0.0.7 (2024-10-06)
 
-### Perf
+### Performance
 
 - support parsing and caching line by line based on shiki grammar state
 
 ## 0.0.6 (2024-10-06)
 
-### Perf
+### Performance
 
 - reduce the time complexity of finding node and offset
 
