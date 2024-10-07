@@ -10,6 +10,18 @@ export function debounce<T extends unknown[]>(func: (...args: T) => void, {
     };
 }
 
+export function once<T extends unknown[]>(func: (...args: T) => void) {
+    let called = false;
+    return function(this: unknown, ...args: T) {
+        if (called) {
+            return false;
+        }
+        called = true;
+        func.apply(this, args);
+        return true;
+    };
+}
+
 export function isArrayEqual(a: unknown[], b: unknown[]) {
     if (a.length !== b.length) {
         return false;

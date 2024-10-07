@@ -1,6 +1,6 @@
 import type { BundledLanguage, BundledTheme, CodeToTokensWithThemesOptions, HighlighterCore } from "shiki";
 import { diff } from "./diff";
-import { debounce, isArrayEqual } from "./utils";
+import { debounce, isArrayEqual, once } from "./utils";
 import type { ColorLoad, LoadLine } from "./types";
 
 export interface MountPlainShikiOptions {
@@ -70,13 +70,11 @@ export function createPlainShiki(shiki: HighlighterCore) {
             update();
         }
 
-        function dispose() {
+        const dispose = once(() => {
             watch && el.removeEventListener("input", debouncedUpdate);
 
             const idx = document.adoptedStyleSheets.indexOf(stylesheet);
-            if (idx !== -1) {
-                document.adoptedStyleSheets.splice(idx, 1);
-            }
+            document.adoptedStyleSheets.splice(idx, 1);
 
             for (const [name, ranges] of colorRanges) {
                 const highlight = CSS.highlights.get(name);
@@ -84,7 +82,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
                     highlight?.delete(range);
                 }
             }
-        }
+        });
 
         function patch(loads: ColorLoad[], oldLoads: ColorLoad[]) {
             for (const { range, name } of walkTokens(oldLoads)) {
