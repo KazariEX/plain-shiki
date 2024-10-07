@@ -165,8 +165,6 @@ export function createPlainShiki(shiki: HighlighterCore) {
                     grammarState: loadLines[i - 1]?.lastGrammarState
                 });
 
-                console.log(i, text, tokenResult);
-
                 const loads: ColorLoad[] = [];
                 for (const token of tokenResult.tokens[0]) {
                     const [startNode, startOffset] = findNodeAndOffset(offset + token.offset);
@@ -222,13 +220,13 @@ function collectTextNodes(el: HTMLElement) {
     return textNodes;
 }
 
-function createNodeAndOffsetFind(innerText: string, textNodes: Text[], initalOffset: number) {
+function createNodeAndOffsetFind(innerText: string, textNodes: Text[], initialOffset: number) {
     let i = 0;
     let offset = 0;
     let isCorrect = false;
 
-    if (initalOffset > 0) {
-        find(initalOffset);
+    if (initialOffset > 0) {
+        find(initialOffset);
     }
     return find;
 
