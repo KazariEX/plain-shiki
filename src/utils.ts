@@ -9,3 +9,15 @@ export function debounce<T extends unknown[]>(func: (...args: T) => void, {
         }, delay);
     };
 }
+
+export function isArrayEqual(a: unknown[], b: unknown[]) {
+    if (a.length !== b.length) {
+        return false;
+    }
+    for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[i]) {
+            return false;
+        }
+    }
+    return true;
+}

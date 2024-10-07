@@ -1,5 +1,7 @@
-import type { BundledLanguage, BundledTheme, CodeToTokensWithThemesOptions, GrammarState, HighlighterCore, ThemedTokenWithVariants } from "shiki";
-import { debounce } from "./utils";
+import type { BundledLanguage, BundledTheme, CodeToTokensWithThemesOptions, HighlighterCore } from "shiki";
+import { diff } from "./diff";
+import { debounce, isArrayEqual } from "./utils";
+import type { ColorLoad, LoadLine } from "./types";
 
 export interface MountPlainShikiOptions {
     /**
@@ -40,17 +42,6 @@ export interface MountPlainShikiOptions {
 
 export type CreatePlainShikiReturns = ReturnType<typeof createPlainShiki>;
 
-interface ColorLoad {
-    token: ThemedTokenWithVariants;
-    range: Range;
-}
-
-interface LoadLine {
-    text: string;
-    lastGrammarState: GrammarState;
-    loads: ColorLoad[];
-}
-
 export function createPlainShiki(shiki: HighlighterCore) {
     const isSupported = () => "CSS" in globalThis && "highlights" in CSS;
 
@@ -90,15 +81,24 @@ export function createPlainShiki(shiki: HighlighterCore) {
             }
         }
 
-        function resolveName(theme: string, color: string) {
-            return `shiki-${theme}-${color.slice(1).toLowerCase()}`;
+        function resolveName(varName: string, color: string) {
+            const theme = varName.slice("--shiki-".length);
+            const name = `shiki-${theme}-${color.slice(1).toLowerCase()}`;
+            return {
+                name,
+                theme
+            };
         }
 
         function patch(loads: ColorLoad[], oldLoads: ColorLoad[]) {
             for (const { token, range } of oldLoads) {
-                for (const theme in token.variants) {
-                    const { color } = token.variants[theme];
-                    const name = resolveName(theme, color!);
+                if (typeof token.htmlStyle !== "object") {
+                    continue;
+                }
+
+                for (const varName in token.htmlStyle) {
+                    const color = token.htmlStyle[varName];
+                    const { name } = resolveName(varName, color);
 
                     const highlight = CSS.highlights.get(name);
                     if (!highlight) {
@@ -109,9 +109,13 @@ export function createPlainShiki(shiki: HighlighterCore) {
             }
 
             for (const { token, range } of loads) {
-                for (const theme in token.variants) {
-                    const { color } = token.variants[theme];
-                    const name = resolveName(theme, color!);
+                if (typeof token.htmlStyle !== "object") {
+                    continue;
+                }
+
+                for (const varName in token.htmlStyle) {
+                    const color = token.htmlStyle[varName];
+                    const { name, theme } = resolveName(varName, color);
                     const isDefault = theme === "light";
 
                     let highlight = CSS.highlights.get(name);
@@ -133,53 +137,40 @@ export function createPlainShiki(shiki: HighlighterCore) {
             }
         }
 
-        function diff(textLines: string[]) {
-            let i = 0;
-            for (; i < textLines.length; i++) {
-                if (textLines[i] !== loadLines[i]?.text) {
-                    return i;
-                }
-                for (const { range } of loadLines[i]?.loads ?? []) {
-                    if (range.collapsed) {
-                        return i;
-                    }
-                }
-            }
-            return i;
-        }
-
         function update() {
-            const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
-
-            const textNodes: Node[] = [];
-            let node;
-            while (node = walker.nextNode()) {
-                textNodes.push(node);
-            }
-
             const { innerText } = el;
             const textLines = innerText.split("\n");
+            const textNodes = collectTextNodes(el);
 
-            let i = diff(textLines);
-            let lineOffset = textLines.slice(0, i).reduce((res, text) => res + text.length + 1, 0);
+            const [start, end] = diff(textLines, loadLines);
+            const length = end - textLines.length + loadLines.length;
+            const chunk = loadLines.splice(length);
+            for (let i = start; i < length; i++) {
+                patch([], loadLines[i]?.loads ?? []);
+            }
+            loadLines.length = end;
+            loadLines.fill(null!, start, end);
+            loadLines.push(...chunk);
 
-            let j = 0;
-            let offset = 0;
-            let isCorrect = false;
-            findNodeAndOffset(lineOffset);
+            let offset = textLines.slice(0, start).reduce((res, text) => res + text.length + 1, 0);
+            const findNodeAndOffset = createNodeAndOffsetFind(innerText, textNodes, offset);
 
-            for (; i < textLines.length; i++) {
+            for (let i = start; i < textLines.length; i++) {
                 const text = textLines[i];
 
-                const tokenLines = shiki.codeToTokensWithThemes(text, {
+                const tokenResult = shiki.codeToTokens(text, {
                     lang,
-                    themes
+                    themes,
+                    defaultColor: false,
+                    grammarState: loadLines[i - 1]?.lastGrammarState
                 });
 
+                console.log(i, text, tokenResult);
+
                 const loads: ColorLoad[] = [];
-                for (const token of tokenLines[0]) {
-                    const [startNode, startOffset] = findNodeAndOffset(lineOffset + token.offset);
-                    const [endNode, endOffset] = findNodeAndOffset(lineOffset + token.offset + token.content.length);
+                for (const token of tokenResult.tokens[0]) {
+                    const [startNode, startOffset] = findNodeAndOffset(offset + token.offset);
+                    const [endNode, endOffset] = findNodeAndOffset(offset + token.offset + token.content.length);
 
                     const range = document.createRange();
                     range.setStart(startNode, startOffset);
@@ -188,39 +179,21 @@ export function createPlainShiki(shiki: HighlighterCore) {
                 }
 
                 const loadLine = loadLines[i] ??= {} as LoadLine;
-                loadLine.text = text;
 
                 patch(loads, loadLine.loads ?? []);
                 loadLine.loads = loads;
+                loadLine.text = text;
 
-                const lastGrammarState = shiki.getLastGrammarState(text ?? "", { lang });
-                if (loadLine.lastGrammarState !== lastGrammarState) {
-                    loadLine.lastGrammarState = lastGrammarState;
-                    lineOffset += text.length + 1;
+                const oldScopes = loadLine.lastGrammarState?.getScopes() ?? [Number.NaN];
+                const newScopes = tokenResult.grammarState?.getScopes() ?? [Number.NaN];
+
+                const skip = isArrayEqual(oldScopes, newScopes);
+                loadLine.lastGrammarState = tokenResult.grammarState;
+
+                if (!skip) {
+                    offset += text.length + 1;
                 }
                 else break;
-            }
-
-            function findNodeAndOffset(tokenOffset: number) {
-                for (; j < textNodes.length; j++) {
-                    const node = textNodes[j];
-                    const { textContent } = node;
-                    if (!textContent) {
-                        continue;
-                    }
-
-                    if (!isCorrect) {
-                        offset = innerText.indexOf(textContent, offset);
-                        isCorrect = true;
-                    }
-
-                    if (offset + textContent.length < tokenOffset) {
-                        offset += textContent.length;
-                        isCorrect = false;
-                    }
-                    else break;
-                }
-                return [textNodes[j], tokenOffset - offset] as const;
             }
         }
 
@@ -236,4 +209,48 @@ export function createPlainShiki(shiki: HighlighterCore) {
         },
         mount
     };
+}
+
+function collectTextNodes(el: HTMLElement) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+
+    let node;
+    while (node = walker.nextNode()) {
+        textNodes.push(node as Text);
+    }
+    return textNodes;
+}
+
+function createNodeAndOffsetFind(innerText: string, textNodes: Text[], initalOffset: number) {
+    let i = 0;
+    let offset = 0;
+    let isCorrect = false;
+
+    if (initalOffset > 0) {
+        find(initalOffset);
+    }
+    return find;
+
+    function find(tokenOffset: number) {
+        for (; i < textNodes.length; i++) {
+            const node = textNodes[i];
+            const { textContent } = node;
+            if (!textContent) {
+                continue;
+            }
+
+            if (!isCorrect) {
+                offset = innerText.indexOf(textContent, offset);
+                isCorrect = true;
+            }
+
+            if (offset + textContent.length < tokenOffset) {
+                offset += textContent.length;
+                isCorrect = false;
+            }
+            else break;
+        }
+        return [textNodes[i], tokenOffset - offset] as const;
+    }
 }
