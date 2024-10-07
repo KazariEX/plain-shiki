@@ -62,8 +62,8 @@ export function createPlainShiki(shiki: HighlighterCore) {
         const stylesheet = new CSSStyleSheet();
         document.adoptedStyleSheets.push(stylesheet);
 
+        const colorRanges = new Map<string, Set<Range>>();
         const loadLines: LoadLine[] = [];
-        const names = new Set<string>();
 
         if (isSupported()) {
             watch && el.addEventListener("input", debouncedUpdate);
@@ -76,18 +76,21 @@ export function createPlainShiki(shiki: HighlighterCore) {
             const idx = document.adoptedStyleSheets.indexOf(stylesheet);
             document.adoptedStyleSheets.splice(idx, 1);
 
-            for (const name of names) {
-                CSS.highlights.delete(name);
+            for (const [name, ranges] of colorRanges) {
+                const highlight = CSS.highlights.get(name);
+                for (const range of ranges) {
+                    highlight?.delete(range);
+                }
             }
         }
 
         function patch(loads: ColorLoad[], oldLoads: ColorLoad[]) {
             for (const { range, name } of walkTokens(oldLoads)) {
                 const highlight = CSS.highlights.get(name);
-                if (!highlight) {
-                    continue;
-                }
                 highlight?.delete(range);
+
+                const ranges = colorRanges.get(name);
+                ranges?.delete(range);
             }
 
             for (const { range, color, theme, name } of walkTokens(loads)) {
@@ -99,15 +102,17 @@ export function createPlainShiki(shiki: HighlighterCore) {
                     highlight.priority = isDefault ? 0 : 1;
                 }
 
-                if (!names.has(name)) {
+                let ranges = colorRanges.get(name);
+                if (!ranges) {
+                    colorRanges.set(name, ranges = new Set());
                     const rule = `${
                         isDefault ? ":root" : selector(theme)
                     }::highlight(${name}) { color: ${color}; }`;
                     stylesheet.insertRule(rule);
-                    names.add(name);
                 }
 
                 highlight.add(range);
+                ranges.add(range);
             }
         }
 
