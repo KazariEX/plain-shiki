@@ -28,7 +28,8 @@
     "build": "tsup-node",
     "build:playground": "pnpm -C playground run generate",
     "dev": "tsup-node --watch",
-    "release": "bumpp --no-push -c \"release: v%s\""
+    "release": "bumpp --no-push -c \"release: v%s\"",
+    "test": "vitest"
   },
   "dependencies": {
     "shiki": "^1.22.0"
@@ -41,6 +42,7 @@
     "bumpp": "^9.6.1",
     "eslint": "^9.12.0",
     "stylelint": "^16.9.0",
-    "tsup": "^8.3.0"
+    "tsup": "^8.3.0",
+    "vitest": "^2.1.2"
   }
 }
