@@ -12,6 +12,12 @@ pnpm i plain-shiki
 
 ## Usage
 
+1. Firstly, create any element that can contain text nodes, e.g. `<div class="plain-shiki"></div>`
+
+2. Add the `contenteditable` attribute to this element. If you don't mind the [compatibility](https://caniuse.com/?search=contenteditable) of the target browser, you can specify its value as `plaintext-only`
+
+3. Write the following code:
+
 ```ts
 import { createPlainShiki } from "plain-shiki";
 import { createHighlighter } from "shiki";
