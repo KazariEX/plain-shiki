@@ -127,9 +127,10 @@ export function createPlainShiki(shiki: HighlighterCore) {
             for (let i = start; i < length; i++) {
                 patch([], loadLines[i]?.loads ?? []);
             }
-            loadLines.length = end;
-            loadLines.fill(null!, start, end);
-            loadLines.push(...chunk);
+            const lastGrammarState = loadLines.at(-1)?.lastGrammarState;
+            loadLines.length = end - 1;
+            loadLines.fill(null!, start, end - 1);
+            loadLines.push(createLoadLine({ lastGrammarState }), ...chunk);
 
             let offset = textLines.slice(0, start).reduce((res, text) => res + text.length + 1, 0);
             const findNodeAndOffset = createFindNodeAndOffset(innerText, textNodes, offset);
@@ -156,9 +157,9 @@ export function createPlainShiki(shiki: HighlighterCore) {
                     loads.push({ token, range });
                 }
 
-                const loadLine = loadLines[i] ??= {} as LoadLine;
+                const loadLine = loadLines[i] ??= createLoadLine();
 
-                patch(loads, loadLine.loads ?? []);
+                patch(loads, loadLine.loads);
                 loadLine.loads = loads;
                 loadLine.text = text;
 
@@ -213,6 +214,15 @@ function collectTextNodes(el: HTMLElement) {
         textNodes.push(node as Text);
     }
     return textNodes;
+}
+
+function createLoadLine(options: Partial<LoadLine> = {}) {
+    return {
+        text: "",
+        lastGrammarState: void 0,
+        loads: [],
+        ...options
+    } as LoadLine;
 }
 
 function createFindNodeAndOffset(innerText: string, textNodes: Text[], initialOffset: number) {
