@@ -1,6 +1,6 @@
 import type { BundledLanguage, BundledTheme, CodeToTokensWithThemesOptions, HighlighterCore } from "shiki";
 import { diff } from "./diff";
-import { debounce, isArrayEqual, once } from "./utils";
+import { isArrayEqual, once, throttle } from "./utils";
 import type { ColorLoad, LoadLine } from "./types";
 
 export interface MountPlainShikiOptions {
@@ -40,9 +40,9 @@ export interface MountPlainShikiOptions {
     watch?: boolean;
 
     /**
-     * @description Delay in updating when `watch: true`.
+     * @description Throttle delay in updating when `watch: true`.
      *
-     * @default 0
+     * @default 33.4
      */
     delay?: number;
 }
@@ -62,35 +62,14 @@ export function createPlainShiki(shiki: HighlighterCore) {
             defaultTheme = "light",
             selector = (theme) => `.${theme}`,
             watch = true,
-            delay = 0
+            delay = 16.7
         } = options;
-
-        const debouncedUpdate = delay > 0 ? debounce(update, { delay }) : update;
 
         const stylesheet = new CSSStyleSheet();
         document.adoptedStyleSheets.push(stylesheet);
 
         const colorRanges = new Map<string, Set<Range>>();
         const loadLines: LoadLine[] = [];
-
-        if (isSupported()) {
-            watch && el.addEventListener("input", debouncedUpdate);
-            update();
-        }
-
-        const dispose = once(() => {
-            watch && el.removeEventListener("input", debouncedUpdate);
-
-            const idx = document.adoptedStyleSheets.indexOf(stylesheet);
-            document.adoptedStyleSheets.splice(idx, 1);
-
-            for (const [name, ranges] of colorRanges) {
-                const highlight = CSS.highlights.get(name);
-                for (const range of ranges) {
-                    highlight?.delete(range);
-                }
-            }
-        });
 
         function patch(loads: ColorLoad[], oldLoads: ColorLoad[]) {
             for (const { range, name } of walkTokens(oldLoads)) {
@@ -124,12 +103,33 @@ export function createPlainShiki(shiki: HighlighterCore) {
             }
         }
 
-        function update() {
-            const { innerText } = el;
-            const textLines = innerText.split("\n");
-            const textNodes = collectTextNodes(el);
+        function tempUpdate(textLines: string[], start: number, end: number) {
+            if (end - start > 1) {
+                return;
+            }
 
-            const [start, end] = diff(textLines, loadLines);
+            const textLine = textLines[start];
+            const loadLine = loadLines[start];
+            const result = diff(textLine, loadLine.text);
+            const left = loadLine.offset + result[0];
+            const right = loadLine.offset + result[1];
+
+            const load = loadLine.loads?.find(({ range }) => left >= range.startOffset && left < range.endOffset);
+            if (!load) {
+                return;
+            }
+
+            const { range } = load;
+            range.setEnd(range.endContainer, Math.max(range.endOffset, right));
+        }
+
+        const fullUpdate = throttle((
+            innerText: string,
+            textLines: string[],
+            textNodes: Text[],
+            start: number,
+            end: number
+        ) => {
             const length = end - textLines.length + loadLines.length;
             const chunk = loadLines.splice(length);
             for (let i = start; i < length; i++) {
@@ -170,6 +170,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
                 patch(loads, loadLine.loads);
                 loadLine.loads = loads;
                 loadLine.text = text;
+                loadLine.offset = offset;
 
                 const oldScopes = loadLine.lastGrammarState?.getScopes() ?? [Number.NaN];
                 const newScopes = tokenResult.grammarState?.getScopes() ?? [Number.NaN];
@@ -182,6 +183,40 @@ export function createPlainShiki(shiki: HighlighterCore) {
                 }
                 else break;
             }
+        }, delay);
+
+        if (isSupported()) {
+            watch && el.addEventListener("input", update);
+            update();
+        }
+
+        const dispose = once(() => {
+            watch && el.removeEventListener("input", update);
+
+            const idx = document.adoptedStyleSheets.indexOf(stylesheet);
+            document.adoptedStyleSheets.splice(idx, 1);
+
+            for (const [name, ranges] of colorRanges) {
+                const highlight = CSS.highlights.get(name);
+                for (const range of ranges) {
+                    highlight?.delete(range);
+                }
+            }
+        });
+
+        function update() {
+            const { innerText } = el;
+            const textLines = innerText.split("\n");
+            const textNodes = collectTextNodes(el);
+
+            const [start, end] = diff(
+                textLines,
+                loadLines,
+                (i) => loadLines[i]?.text,
+                (i) => loadLines[i]?.loads.some(({ range }) => range.collapsed)
+            );
+            tempUpdate(textLines, start, end);
+            fullUpdate(innerText, textLines, textNodes, start, end);
         }
 
         return {
@@ -227,6 +262,7 @@ function collectTextNodes(el: HTMLElement) {
 function createLoadLine(options: Partial<LoadLine> = {}) {
     return {
         text: "",
+        offset: 0,
         lastGrammarState: void 0,
         loads: [],
         ...options

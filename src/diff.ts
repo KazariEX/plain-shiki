@@ -1,26 +1,26 @@
-import type { LoadLine } from "./types";
-
-export function diff(textLines: string[], loadLines: LoadLine[]) {
+export function diff(
+    textLines: string | string[],
+    dataLines: string | unknown[],
+    getText?: (index: number) => string,
+    addition?: (index: number) => boolean
+) {
     let i = 0;
     for (; i < textLines.length; i++) {
-        if (textLines[i] !== loadLines[i]?.text) {
-            break;
-        }
-        if (loadLines[i]?.loads.some(({ range }) => range.collapsed)) {
+        const text = getText?.(i) ?? dataLines[i];
+        if (textLines[i] !== text || addition?.(i)) {
             break;
         }
     }
 
     let j = textLines.length - 1;
-    let k = loadLines.length - 1;
+    let k = dataLines.length - 1;
     for (; j >= 0 && k >= 0; j--, k--) {
-        if (textLines[j] !== loadLines[k]?.text) {
-            break;
-        }
-        if (loadLines[k]?.loads.some(({ range }) => range.collapsed)) {
+        const text = getText?.(k) ?? dataLines[k];
+        if (textLines[j] !== text || addition?.(k)) {
             break;
         }
     }
+    j = textLines.length > dataLines.length ? j : k;
 
     if (i > j) {
         [i, j] = [j, i];
@@ -28,39 +28,39 @@ export function diff(textLines: string[], loadLines: LoadLine[]) {
     i = Math.max(0, i);
     j = Math.min(textLines.length - 1, j) + 1;
 
-    if (textLines.length === loadLines.length && i + 1 === j) {
+    if (textLines.length === dataLines.length && i + 1 === j) {
         return [i, j];
     }
-    return [...expand(textLines, i, j)];
+    return expand([...textLines], i, j);
 }
 
-function* expand(textLines: string[], start: number, end: number) {
-    const side = matchTwoSides(Math.max(0, start + end - textLines.length));
+function expand(chars: string[], start: number, end: number) {
+    const side = matchTwoSides(Math.max(0, start + end - chars.length));
     start -= side;
     end += side;
 
     function matchTwoSides(offset: number) {
-        const pos = textLines.slice(0, start).indexOf(textLines[end], offset);
+        const pos = chars.slice(0, start).indexOf(chars[end], offset);
 
         if (pos === -1) {
             return 0;
         }
         for (let j = pos, k = end; j < start - 1; k++, j++) {
-            if (textLines[j + 1] !== textLines[k + 1]) {
+            if (chars[j + 1] !== chars[k + 1]) {
                 return matchTwoSides(offset + 1);
             }
         }
         return start - pos;
     }
 
-    const inner = new Set(textLines.slice(start, end));
+    const inner = new Set(chars.slice(start, end));
 
     const left = [];
-    for (let i = start - 1, it = end - 1; inner.has(textLines[i]); i--, it--) {
-        const text = textLines[i];
+    for (let i = start - 1, it = end - 1; inner.has(chars[i]); i--, it--) {
+        const text = chars[i];
 
         for (; it >= start; it--) {
-            if (textLines[it] === text) {
+            if (chars[it] === text) {
                 break;
             }
         }
@@ -68,14 +68,13 @@ function* expand(textLines: string[], start: number, end: number) {
             left.push(text);
         }
     }
-    yield start - left.length;
 
     const right = [];
-    for (let i = end, it = start; inner.has(textLines[i]); i++, it++) {
-        const text = textLines[i];
+    for (let i = end, it = start; inner.has(chars[i]); i++, it++) {
+        const text = chars[i];
 
         for (; it < end; it++) {
-            if (textLines[it] === text) {
+            if (chars[it] === text) {
                 break;
             }
         }
@@ -83,5 +82,6 @@ function* expand(textLines: string[], start: number, end: number) {
             right.push(text);
         }
     }
-    yield end + right.length;
+
+    return [start - left.length, end + right.length] as const;
 }

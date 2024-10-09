@@ -1,12 +1,16 @@
-export function debounce<T extends unknown[]>(func: (...args: T) => void, {
-    delay = 1500
-} = {}) {
+export function throttle<T extends unknown[]>(func: (...args: T) => void, delay: number) {
+    let start: number;
     let timer: NodeJS.Timeout | undefined = void 0;
     return function(this: unknown, ...args: T) {
-        !timer && func.apply(this, args);
+        if (!timer) {
+            start = performance.now();
+            func.apply(this, args);
+        }
+        clearTimeout(timer);
         timer = setTimeout(() => {
+            func.apply(this, args);
             timer = void 0;
-        }, delay);
+        }, delay - (performance.now() - start) / 1000);
     };
 }
 

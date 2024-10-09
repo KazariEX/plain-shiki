@@ -7,6 +7,7 @@ export interface ColorLoad {
 
 export interface LoadLine {
     text: string;
+    offset: number;
     lastGrammarState: GrammarState | undefined;
     loads: ColorLoad[];
 }
