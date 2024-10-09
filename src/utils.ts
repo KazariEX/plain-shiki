@@ -1,16 +1,23 @@
 export function throttle<T extends unknown[]>(func: (...args: T) => void, delay: number) {
-    let start: number;
+    let start = 0;
     let timer: NodeJS.Timeout | undefined = void 0;
     return function(this: unknown, ...args: T) {
-        if (!timer) {
-            start = performance.now();
-            func.apply(this, args);
-        }
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            func.apply(this, args);
+        if (timer) {
+            clearTimeout(timer);
             timer = void 0;
-        }, delay - (performance.now() - start) / 1000);
+        }
+        const now = performance.now() / 1000;
+        if (!start || now - start >= delay) {
+            func.apply(this, args);
+            start = now;
+        }
+        else {
+            timer = setTimeout(() => {
+                func.apply(this, args);
+                start = performance.now();
+                timer = void 0;
+            }, delay + start - now);
+        }
     };
 }
 
