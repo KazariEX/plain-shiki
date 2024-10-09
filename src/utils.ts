@@ -6,7 +6,7 @@ export function throttle<T extends unknown[]>(func: (...args: T) => void, delay:
             clearTimeout(timer);
             timer = void 0;
         }
-        const now = performance.now() / 1000;
+        const now = performance.now();
         if (!start || now - start >= delay) {
             func.apply(this, args);
             start = now;

@@ -62,7 +62,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
             defaultTheme = "light",
             selector = (theme) => `.${theme}`,
             watch = true,
-            delay = 16.7
+            delay = 33.4
         } = options;
 
         const stylesheet = new CSSStyleSheet();
