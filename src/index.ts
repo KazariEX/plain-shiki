@@ -12,11 +12,18 @@ export interface MountPlainShikiOptions {
     lang: BundledLanguage;
 
     /**
-     * @description Theme of the code to be highlighted.
+     * @description Themes of the code to be highlighted.
      *
      * @default {light:"min-light",dark:"min-dark"}
      */
     themes?: CodeToTokensWithThemesOptions<BundledLanguage, BundledTheme>["themes"];
+
+    /**
+     * @description Name of default theme.
+     *
+     * @default "light"
+     */
+    defaultTheme?: string;
 
     /**
      * @description Root element selector corresponding to the theme.
@@ -52,6 +59,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
                 light: "min-light",
                 dark: "min-dark"
             },
+            defaultTheme = "light",
             selector = (theme) => `.${theme}`,
             watch = true,
             delay = 0
@@ -94,7 +102,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
             }
 
             for (const { range, color, theme, name } of walkTokens(loads)) {
-                const isDefault = theme === "light";
+                const isDefault = theme === defaultTheme;
 
                 let highlight = CSS.highlights.get(name);
                 if (!highlight) {
