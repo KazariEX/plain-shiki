@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    const props = defineProps<{
+    const { mode } = defineProps<{
         mode: string;
         icon: string;
     }>();
@@ -8,13 +8,13 @@
 
     function setColorMode() {
         tryStartViewTransition(() => {
-            colorMode.preference = props.mode;
+            colorMode.preference = mode;
         });
     }
 </script>
 
 <template>
-    <nav-button
+    <plain-button
         :icon
         :class="{
             [`is-checked`]: colorMode.preference === mode

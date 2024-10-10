@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-    const {
-        as = "a"
-    } = defineProps<{
+    const { as = "a" } = defineProps<{
         as?: string;
         icon: string;
     }>();
@@ -20,8 +18,8 @@
         size="9"
         b="1 solid gray op-40 rounded-md"
         bg="transparent"
-        un-text="5"
-        transition="250"
+        hover:bg="gray op-20"
+        un-text="4.5"
         cursor="pointer"
     >
         <iconify :name="icon"/>

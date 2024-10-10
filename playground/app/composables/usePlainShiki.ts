@@ -1,31 +1,48 @@
 import { createPlainShiki, type CreatePlainShikiReturns, type MountPlainShikiOptions } from "plain-shiki";
-import { type BundledLanguage, createHighlighter, createJavaScriptRegexEngine } from "shiki";
+import {
+    type BundledLanguage,
+    bundledLanguages,
+    type BundledTheme,
+    bundledThemes,
+    createHighlighterCore,
+    createJavaScriptRegexEngine,
+    type HighlighterCore
+} from "shiki";
 
-export type UsePlainShikiOptions = Omit<MountPlainShikiOptions, "lang"> & {
+export type UsePlainShikiOptions = Omit<MountPlainShikiOptions, "lang" | "themes"> & {
     lang: MaybeRefOrGetter<BundledLanguage>;
+    themes: MaybeRefOrGetter<Record<string, BundledTheme>>;
 };
+
+let shiki: HighlighterCore;
 
 export default function(el: MaybeRefOrGetter<HTMLElement | null>, options: UsePlainShikiOptions) {
     const target = toRef(el);
     const lang = toRef(options.lang);
+    const themes = toRef(options.themes);
 
     let plain: CreatePlainShikiReturns;
     let ctx: ReturnType<(typeof plain)["mount"]>;
 
-    const { trigger } = watchTriggerable([target, lang], () => {
+    const { trigger } = watchTriggerable([target, lang, themes], async () => {
         ctx?.dispose();
+
         if (target.value) {
+            await shiki?.loadLanguage(bundledLanguages[lang.value]);
+            for (const theme of Object.values(themes.value)) {
+                await shiki?.loadTheme(bundledThemes[theme]);
+            }
+
             ctx = plain?.mount(target.value, {
                 ...options,
-                lang: lang.value
+                lang: lang.value,
+                themes: themes.value
             });
         }
     });
 
     tryOnMounted(async () => {
-        const shiki = await createHighlighter({
-            langs: ["html", "css", "js", "ts"],
-            themes: Object.values(options.themes ?? {}).filter((theme) => theme !== void 0),
+        shiki ??= await createHighlighterCore({
             engine: createJavaScriptRegexEngine()
         });
 

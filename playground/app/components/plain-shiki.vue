@@ -1,13 +1,16 @@
 <script lang="ts" setup>
+    import type { BundledLanguage, BundledTheme } from "shiki";
     import example from "~/assets/example.ts?raw";
+
+    const { lang, themes } = defineProps<{
+        lang: BundledLanguage;
+        themes: Record<string, BundledTheme>;
+    }>();
 
     const editorEl = useTemplateRef("editor");
     usePlainShiki(editorEl, {
-        lang: "ts",
-        themes: {
-            light: "catppuccin-latte",
-            dark: "one-dark-pro"
-        }
+        lang: () => lang,
+        themes: () => themes
     });
 </script>
 
@@ -15,17 +18,14 @@
     <div
         ref="editor"
         class="plain-shiki"
-        p="x-3 y-2"
+        overflow="x-auto"
+        p="x-4 y-3"
         outline="none"
+        font="mono"
         whitespace="break-spaces"
-        lh="6"
+        leading="6"
+        text="nowrap"
         contenteditable
         v-html="example"
     ></div>
 </template>
-
-<style>
-    .plain-shiki {
-        font-family: consolas, var(--font);
-    }
-</style>
