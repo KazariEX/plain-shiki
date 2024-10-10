@@ -9,8 +9,8 @@
     <select-root v-model="modelValue">
         <select-trigger
             flex="inline items-center gap-1.5"
-            h="8"
             w="45"
+            h="8"
             outline="none"
             bg="inherit"
             font="mono"
@@ -62,6 +62,6 @@
     }
 
     .select-item[data-highlighted] {
-        --uno: outline-none text-primary bg-gray bg-op-30;
+        --uno: outline-none bg-gray bg-op-30 text-primary;
     }
 </style>

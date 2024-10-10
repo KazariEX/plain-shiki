@@ -28,6 +28,6 @@
 
 <style scoped>
     .is-checked {
-        --uno: outline-primary outline outline-2 outline-offset--1;
+        --uno: outline outline-2 outline-primary outline-offset--1;
     }
 </style>

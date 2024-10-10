@@ -21,9 +21,9 @@
 <template>
     <header
         flex="~ items-center justify-between"
+        max-w="screen-lg"
         m="x-auto y-4"
         p="x-4"
-        max-w="screen-lg"
     >
         <hgroup flex="~ gap-2 items-center">
             <h1 font="bold" text="5">Plain Shiki Playground</h1>
@@ -43,9 +43,9 @@
         </nav>
     </header>
     <main
+        max-w="screen-lg"
         m="x-auto"
         p="x-4"
-        max-w="screen-lg"
     >
         <div b="1 solid gray op-40 rounded-md">
             <div
