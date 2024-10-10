@@ -1,3 +1,18 @@
+## 0.0.11 (2024-10-10)
+
+### Features
+
+- add `defaultTheme` option
+
+### Performance
+
+- keep the grammar state of the last editing line
+- optimize continuous input
+
+### Bug Fixes
+
+- merge lines to diff overlapping content
+
 ## 0.0.9 (2024-10-08)
 
 ### Bug Fixes
@@ -10,7 +25,7 @@
 
 ### Features
 
-- calc edit diff for better rerenderring
+- calc edit diff for better rerendering
 
 ### Bug Fixes
 
