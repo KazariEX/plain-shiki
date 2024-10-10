@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url";
+
 export default defineNuxtConfig({
     app: {
         head: {
@@ -6,6 +8,9 @@ export default defineNuxtConfig({
             ],
             title: "Plain Shiki"
         }
+    },
+    alias: {
+        "plain-shiki": fileURLToPath(new URL("../src/index.ts", import.meta.url))
     },
     css: [
         "~/assets/style.css"
