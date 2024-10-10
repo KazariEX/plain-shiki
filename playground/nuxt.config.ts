@@ -6,7 +6,7 @@ export default defineNuxtConfig({
             link: [
                 { rel: "icon", href: "https://shiki.style/logo.svg" }
             ],
-            title: "Plain Shiki"
+            title: "Plain Shiki Playground"
         }
     },
     alias: {
