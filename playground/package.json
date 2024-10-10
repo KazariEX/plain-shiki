@@ -7,15 +7,16 @@
   },
   "dependencies": {
     "@vueuse/core": "^11.1.0",
+    "radix-vue": "^1.9.7",
     "vue": "^3.5.11",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
-    "@nuxt/icon": "^1.5.2",
+    "@nuxt/icon": "^1.5.5",
     "@nuxtjs/color-mode": "^3.5.1",
-    "@unocss/nuxt": "^0.63.2",
+    "@unocss/nuxt": "^0.63.4",
     "@vueuse/nuxt": "^11.1.0",
     "nuxt": "^3.13.2",
-    "unocss": "^0.63.2"
+    "unocss": "^0.63.4"
   }
 }
