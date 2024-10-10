@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    const { as = "a" } = defineProps<{
+    const { as = "button" } = defineProps<{
         as?: string;
         icon: string;
     }>();
