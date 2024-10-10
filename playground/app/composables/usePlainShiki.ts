@@ -1,5 +1,5 @@
+import { createPlainShiki, type CreatePlainShikiReturns, type MountPlainShikiOptions } from "plain-shiki";
 import { type BundledLanguage, createHighlighter, createJavaScriptRegexEngine } from "shiki";
-import { createPlainShiki, type CreatePlainShikiReturns, type MountPlainShikiOptions } from "../../../src";
 
 export type UsePlainShikiOptions = Omit<MountPlainShikiOptions, "lang"> & {
     lang: MaybeRefOrGetter<BundledLanguage>;
