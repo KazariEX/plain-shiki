@@ -16,6 +16,7 @@ export default antfu({
         ...zin.stylistic,
         ...zin.vue,
         ...zin.patch,
+        "antfu/no-top-level-await": "off",
         "no-multi-assign": "off",
         "unicorn/prefer-dom-node-text-content": "off"
     }

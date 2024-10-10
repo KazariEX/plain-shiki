@@ -1,6 +1,8 @@
 {
   "extends": "./.nuxt/tsconfig.json",
-  "exclude": [
-    "./app/assets"
-  ]
+  "compilerOptions": {
+    "paths": {
+      "plain-shiki": ["../src"]
+    }
+  }
 }
