@@ -53,34 +53,32 @@ function expand(chars: string[], start: number, end: number) {
         return start - pos;
     }
 
-    const inner = new Set(chars.slice(start, end));
+    const texts = chars.join("\n");
+    const startOffset = chars.slice(0, start).join("\n").length;
+    const endOffset = chars.slice(0, end).join("\n").length;
 
     const left = [];
-    for (let i = start - 1, it = end - 1; inner.has(chars[i]); i--, it--) {
+    for (let i = start - 1, it = endOffset - 1; i < end && it >= startOffset; i--) {
         const text = chars[i];
 
-        for (; it >= start; it--) {
-            if (chars[it] === text) {
-                break;
-            }
-        }
-        if (it >= start) {
+        const idx = texts.lastIndexOf(text, it);
+        if (idx !== -1 && idx >= startOffset) {
             left.push(text);
+            it = idx - 1;
         }
+        else break;
     }
 
     const right = [];
-    for (let i = end, it = start; inner.has(chars[i]); i++, it++) {
+    for (let i = end, it = startOffset; i >= start && it < endOffset; i++) {
         const text = chars[i];
 
-        for (; it < end; it++) {
-            if (chars[it] === text) {
-                break;
-            }
-        }
-        if (it < end) {
+        const idx = texts.indexOf(text, it);
+        if (idx !== -1 && idx < endOffset) {
             right.push(text);
+            it = idx + 1;
         }
+        else break;
     }
 
     return [start - left.length, end + right.length] as const;

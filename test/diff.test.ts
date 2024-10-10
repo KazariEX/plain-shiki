@@ -1,6 +1,5 @@
 import { expect, it } from "vitest";
 import { diff } from "../src/diff";
-import type { LoadLine } from "../src/types";
 
 it("add 1 line has different content with adjacent", () => {
     expect(diffWith(
@@ -66,6 +65,18 @@ it("add N lines have discontinuous sequential subset in adjacent", () => {
         ["A", "B", "A", "C", "B", "D", "C", "D"]
     //    ^    ^   |^|   ^    ^   |^|   ^    ^
     )).toEqual([0, 8]);
+
+    expect(diffWith(
+        ["A", "B", "C"],
+        ["A", "B", "CA", "B", "C"]
+    //    ^    ^   |^^|   ^    ^
+    )).toEqual([0, 5]);
+
+    expect(diffWith(
+        ["A", "B", "C", "D"],
+        ["A", "B", "CA", "DB", "C", "D"]
+    //    ^    ^   |^^|  |^^|   ^    ^
+    )).toEqual([0, 6]);
 });
 
 function diffWith(oldChars: string[], newChars: string[]) {
