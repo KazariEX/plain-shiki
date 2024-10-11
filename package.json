@@ -1,6 +1,6 @@
 {
   "name": "plain-shiki",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Highlight your plaintext via Shiki",
   "keywords": [
     "shiki",

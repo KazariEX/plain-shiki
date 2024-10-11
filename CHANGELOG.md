@@ -1,3 +1,15 @@
+## 0.0.12 (2024-10-11)
+
+### Features
+
+- add `defaultSelector` option
+- allow passing `false` to `defaultTheme`
+
+### Bug Fixes
+
+- avoid index out of bounds during temporary updates
+- should not use the end index of longer lines
+
 ## 0.0.11 (2024-10-10)
 
 ### Features
