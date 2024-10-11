@@ -23,7 +23,7 @@ export interface MountPlainShikiOptions {
      *
      * @default "light"
      */
-    defaultTheme?: string;
+    defaultTheme?: string | false;
 
     /**
      * @description Root element selector corresponding to the theme.
