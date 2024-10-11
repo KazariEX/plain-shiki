@@ -20,7 +20,6 @@ export function diff(
             break;
         }
     }
-    j = textLines.length > dataLines.length ? j : k;
 
     if (i > j) {
         [i, j] = [j, i];
