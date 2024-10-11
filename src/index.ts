@@ -104,7 +104,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
         }
 
         function tempUpdate(textLines: string[], start: number, end: number) {
-            if (end - start > 1) {
+            if (end - start > 1 || loadLines.length <= start) {
                 return;
             }
 
