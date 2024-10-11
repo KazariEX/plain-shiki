@@ -3,6 +3,7 @@
 ### Features
 
 - add `defaultSelector` option
+- allow passing `false` to `defaultTheme`
 
 ### Bug Fixes
 
