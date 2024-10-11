@@ -1,3 +1,9 @@
+## 0.0.12 (2024-10-11)
+
+### Bug Fixes
+
+- avoid index out of bounds during temporary updates
+
 ## 0.0.11 (2024-10-10)
 
 ### Features
