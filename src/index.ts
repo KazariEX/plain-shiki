@@ -33,6 +33,13 @@ export interface MountPlainShikiOptions {
     selector?: (theme: string) => string;
 
     /**
+     * @description Root element selector with default theme.
+     *
+     * @default ":root"
+     */
+    defaultSelector?: string;
+
+    /**
      * @description Whether to listen for element update events and automatic rendering.
      *
      * @default true
@@ -61,6 +68,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
             },
             defaultTheme = "light",
             selector = (theme) => `.${theme}`,
+            defaultSelector = ":root",
             watch = true,
             delay = 33.4
         } = options;
@@ -93,7 +101,7 @@ export function createPlainShiki(shiki: HighlighterCore) {
                 if (!ranges) {
                     colorRanges.set(name, ranges = new Set());
                     const rule = `${
-                        isDefault ? ":root" : selector(theme)
+                        isDefault ? defaultSelector : selector(theme)
                     }::highlight(${name}) { color: ${color}; }`;
                     stylesheet.insertRule(rule);
                 }
