@@ -1,51 +1,50 @@
 {
   "name": "plain-shiki",
+  "type": "module",
   "version": "0.0.12",
+  "packageManager": "pnpm@9.12.0",
   "description": "Highlight your plaintext via Shiki",
+  "author": "KazariEX",
+  "license": "MIT",
+  "repository": "KazariEX/plain-shiki",
   "keywords": [
     "shiki",
     "highlight",
     "plaintext"
   ],
-  "author": "KazariEX",
-  "repository": "KazariEX/plain-shiki",
-  "license": "MIT",
-  "type": "module",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
-  },
   "files": [
     "dist"
   ],
-  "packageManager": "pnpm@9.12.0",
   "scripts": {
     "build": "tsup-node",
     "build:playground": "pnpm -C playground run generate",
     "dev": "tsup-node --watch",
     "prepack": "pnpm run build",
     "release": "bumpp --no-push -c \"release: v%s\"",
-    "test": "vitest"
-  },
-  "devDependencies": {
-    "@antfu/eslint-config": "^3.7.3",
-    "@types/node": "^22.7.4",
-    "@zinkawaii/eslint-config": "^0.1.7",
-    "@zinkawaii/stylelint-config": "^0.1.5",
-    "bumpp": "^9.6.1",
-    "eslint": "^9.12.0",
-    "shiki": "^1.22.0",
-    "stylelint": "^16.9.0",
-    "tsup": "^8.3.0",
-    "vitest": "^2.1.2"
+    "test": "vitest",
+    "eslint": "eslint ."
   },
   "peerDependencies": {
     "shiki": "^1.22.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^3.12.0",
+    "@types/node": "^22.10.2",
+    "@zinkawaii/eslint-config": "^0.1.9",
+    "@zinkawaii/stylelint-config": "^0.2.2",
+    "bumpp": "^9.9.1",
+    "eslint": "^9.16.0",
+    "shiki": "^1.24.2",
+    "stylelint": "^16.11.0",
+    "tsup": "^8.3.5",
+    "vitest": "^2.1.8"
   }
 }

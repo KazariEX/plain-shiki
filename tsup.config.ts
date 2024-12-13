@@ -10,6 +10,5 @@ export default defineConfig({
     ],
     clean: true,
     dts: true,
-    shims: true,
-    splitting: true
+    shims: true
 });

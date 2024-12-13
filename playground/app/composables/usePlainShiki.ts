@@ -17,7 +17,7 @@ export type UsePlainShikiOptions = Omit<MountPlainShikiOptions, "lang" | "themes
 let shiki: HighlighterCore;
 
 export default function(el: MaybeRefOrGetter<HTMLElement | null>, options: UsePlainShikiOptions) {
-    const target = toRef(el);
+    const target = computed(() => toValue(el));
     const lang = toRef(options.lang);
     const themes = toRef(options.themes);
 
