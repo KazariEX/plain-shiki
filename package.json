@@ -31,13 +31,13 @@
     "eslint": "eslint ."
   },
   "peerDependencies": {
-    "shiki": "^1.22.0"
+    "shiki": ">=1.22.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.1.1",
     "@types/node": "^22.13.1",
-    "@zinkawaii/eslint-config": "^0.1.10",
-    "@zinkawaii/stylelint-config": "^0.2.2",
+    "@zinkawaii/eslint-config": "^0.2.0",
+    "@zinkawaii/stylelint-config": "^0.3.0",
     "bumpp": "^10.0.1",
     "eslint": "^9.19.0",
     "shiki": "^2.3.1",
