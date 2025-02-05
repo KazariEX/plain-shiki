@@ -2,7 +2,7 @@
   "name": "plain-shiki",
   "type": "module",
   "version": "0.0.12",
-  "packageManager": "pnpm@9.12.0",
+  "packageManager": "pnpm@10.2.0",
   "description": "Highlight your plaintext via Shiki",
   "author": "KazariEX",
   "license": "MIT",
@@ -13,11 +13,9 @@
     "plaintext"
   ],
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.js",
-    "require": "./dist/index.cjs"
+    ".": "./dist/index.js"
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -36,15 +34,15 @@
     "shiki": "^1.22.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^3.12.0",
-    "@types/node": "^22.10.2",
-    "@zinkawaii/eslint-config": "^0.1.9",
+    "@antfu/eslint-config": "^4.1.1",
+    "@types/node": "^22.13.1",
+    "@zinkawaii/eslint-config": "^0.1.10",
     "@zinkawaii/stylelint-config": "^0.2.2",
-    "bumpp": "^9.9.1",
-    "eslint": "^9.16.0",
-    "shiki": "^1.24.2",
-    "stylelint": "^16.11.0",
-    "tsup": "^8.3.5",
-    "vitest": "^2.1.8"
+    "bumpp": "^10.0.1",
+    "eslint": "^9.19.0",
+    "shiki": "^2.3.1",
+    "stylelint": "^16.14.1",
+    "tsup": "^8.3.6",
+    "vitest": "^3.0.5"
   }
 }
