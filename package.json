@@ -2,7 +2,7 @@
   "name": "plain-shiki",
   "type": "module",
   "version": "0.2.0",
-  "packageManager": "pnpm@10.5.2",
+  "packageManager": "pnpm@10.8.1",
   "description": "Highlight your plaintext via Shiki",
   "author": "KazariEX",
   "license": "MIT",
@@ -22,9 +22,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup-node",
+    "build": "tsdown",
     "build:playground": "pnpm -C playground run generate",
-    "dev": "tsup-node --watch",
+    "dev": "tsdown -w",
     "prepack": "pnpm run build",
     "release": "bumpp --no-push -c \"release: v%s\"",
     "test": "vitest",
@@ -42,7 +42,7 @@
     "eslint": "^9.21.0",
     "shiki": "^3.1.0",
     "stylelint": "^16.15.0",
-    "tsup": "^8.4.0",
+    "tsdown": "^0.8.0",
     "vitest": "^3.0.7"
   }
 }
