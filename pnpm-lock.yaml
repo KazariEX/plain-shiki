@@ -20,6 +20,9 @@ importers:
       '@zinkawaii/stylelint-config':
         specifier: ^0.3.0
         version: 0.3.0(postcss-html@1.7.0)(postcss@8.5.3)(stylelint@16.15.0(typescript@5.5.4))
+      '@zinkawaii/tsconfig':
+        specifier: ^0.0.1
+        version: 0.0.1
       bumpp:
         specifier: ^10.0.3
         version: 10.0.3(magicast@0.3.5)
@@ -2163,6 +2166,9 @@ packages:
 
   '@zinkawaii/stylelint-config@0.3.0':
     resolution: {integrity: sha512-NHOza7w3OW6jEHm88SEaZLCM6FwyYc7aQMvuV45CReSP59fFRTco+dsGMbgzOf5cjBkx3NkDxPEdJmgwflJE6A==}
+
+  '@zinkawaii/tsconfig@0.0.1':
+    resolution: {integrity: sha512-uO40UtaaIMjc88J/NdKaF0O8mP3fm/jBhiCoMAHdCzSfincB4KJ5ddCf1yhzj8Inxl+MwjirXKAQ5e7QaLawGg==}
 
   abbrev@2.0.0:
     resolution: {integrity: sha512-6/mh1E2u2YgEsCHdY0Yx5oW+61gZU+1vXaoiHHrpKeuRNNgFvS+/jrwHiQhB5apAf5oB7UB7E19ol2R2LKH8hQ==}
@@ -8184,6 +8190,8 @@ snapshots:
       - postcss
       - postcss-html
       - stylelint
+
+  '@zinkawaii/tsconfig@0.0.1': {}
 
   abbrev@2.0.0: {}
 

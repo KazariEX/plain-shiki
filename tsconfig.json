@@ -1,26 +1,6 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "moduleDetection": "force",
-    "module": "Preserve",
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "skipLibCheck": true
-  },
+  "extends": "@zinkawaii/tsconfig",
   "include": [
-    "./src/**/*.ts"
-  ],
-  "exclude": [
-    "./dist"
+    "src/**/*.ts"
   ]
 }
