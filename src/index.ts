@@ -111,33 +111,18 @@ export function createPlainShiki(shiki: HighlighterCore) {
             }
         }
 
-        function tempUpdate(textLines: string[], start: number, end: number) {
-            if (end - start > 1 || loadLines.length <= start) {
-                return;
-            }
+        const update = throttle(() => {
+            const { innerText } = el;
+            const textLines = innerText.split("\n");
+            const textNodes = collectTextNodes(el);
 
-            const textLine = textLines[start];
-            const loadLine = loadLines[start];
-            const result = diff(textLine, loadLine.text);
-            const left = loadLine.offset + result[0];
-            const right = loadLine.offset + result[1];
+            const [start, end] = diff(
+                textLines,
+                loadLines,
+                (i) => loadLines[i]?.text,
+                (i) => loadLines[i]?.loads.some(({ range }) => range.collapsed)
+            );
 
-            const load = loadLine.loads?.find(({ range }) => left >= range.startOffset && left < range.endOffset);
-            if (!load) {
-                return;
-            }
-
-            const { range } = load;
-            range.setEnd(range.endContainer, Math.max(range.endOffset, right));
-        }
-
-        const fullUpdate = throttle((
-            innerText: string,
-            textLines: string[],
-            textNodes: Text[],
-            start: number,
-            end: number
-        ) => {
             const length = end - textLines.length + loadLines.length;
             const chunk = loadLines.splice(length);
             for (let i = start; i < length; i++) {
@@ -211,21 +196,6 @@ export function createPlainShiki(shiki: HighlighterCore) {
                 }
             }
         });
-
-        function update() {
-            const { innerText } = el;
-            const textLines = innerText.split("\n");
-            const textNodes = collectTextNodes(el);
-
-            const [start, end] = diff(
-                textLines,
-                loadLines,
-                (i) => loadLines[i]?.text,
-                (i) => loadLines[i]?.loads.some(({ range }) => range.collapsed)
-            );
-            tempUpdate(textLines, start, end);
-            fullUpdate(innerText, textLines, textNodes, start, end);
-        }
 
         return {
             dispose,
