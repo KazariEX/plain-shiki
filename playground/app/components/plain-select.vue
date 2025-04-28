@@ -11,9 +11,10 @@
     <prime-float-label variant="on">
         <prime-select
             w="full"
-            :options
             editable
             size="small"
+            :options
+            :virtual-scroller-options="{ itemSize: 28 }"
             v-model="modelValue"
         />
         <label>{{ label }}</label>
