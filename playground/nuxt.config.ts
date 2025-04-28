@@ -37,7 +37,7 @@ export default defineNuxtConfig({
         components: {
             prefix: "Prime",
             // https://github.com/primefaces/primevue/issues/7434
-            exclude: ["Form", "FormField"]
+            exclude: ["Editor", "Chart", "Form", "FormField"]
         },
         importTheme: {
             from: "~/themes/index.ts"
