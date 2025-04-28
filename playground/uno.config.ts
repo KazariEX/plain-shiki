@@ -1,9 +1,9 @@
-import { defineConfig, presetAttributify, presetUno, transformerDirectives } from "unocss";
+import { defineConfig, presetAttributify, presetWind3, transformerDirectives } from "unocss";
 
 export default defineConfig({
     presets: [
-        presetUno(),
-        presetAttributify()
+        presetAttributify(),
+        presetWind3()
     ],
     theme: {
         colors: {

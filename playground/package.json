@@ -6,14 +6,16 @@
     "prepare": "nuxi prepare"
   },
   "dependencies": {
+    "@primeuix/themes": "catalog:",
     "@vueuse/core": "catalog:",
-    "radix-vue": "catalog:",
+    "primevue": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:"
   },
   "devDependencies": {
     "@nuxt/icon": "catalog:",
     "@nuxtjs/color-mode": "catalog:",
+    "@primevue/nuxt-module": "catalog:",
     "@unocss/nuxt": "catalog:",
     "@vueuse/nuxt": "catalog:",
     "nuxt": "catalog:",

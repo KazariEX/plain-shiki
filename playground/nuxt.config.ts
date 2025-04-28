@@ -23,14 +23,27 @@ export default defineNuxtConfig({
     modules: [
         "@nuxt/icon",
         "@nuxtjs/color-mode",
+        "@primevue/nuxt-module",
         "@unocss/nuxt",
-        "@vueuse/nuxt",
-        "radix-vue/nuxt"
+        "@vueuse/nuxt"
     ],
     colorMode: {
         classSuffix: ""
     },
     icon: {
         componentName: "iconify"
+    },
+    primevue: {
+        components: {
+            prefix: "Prime",
+            // https://github.com/primefaces/primevue/issues/7434
+            exclude: ["Form", "FormField"]
+        },
+        importTheme: {
+            from: "~/themes/index.ts"
+        },
+        options: {
+            ripple: true
+        }
     }
 });

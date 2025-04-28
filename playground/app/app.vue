@@ -47,17 +47,11 @@
         m="x-auto"
         p="x-4"
     >
-        <div b="1 solid gray op-40 rounded-md">
-            <div
-                flex="~ gap-2 items-center"
-                p="x-4 y-1"
-                b-b="~ solid gray op-40"
-            >
-                <plain-select :items="langNames" v-model="lang"/>
-                <plain-select :items="themeNames" v-model="lightTheme"/>
-                <plain-select :items="themeNames" v-model="darkTheme"/>
-            </div>
-            <plain-shiki :lang :themes/>
+        <div grid="~ cols-3 gap-4">
+            <plain-select label="language" :options="langNames" v-model="lang"/>
+            <plain-select label="light theme" :options="themeNames" v-model="lightTheme"/>
+            <plain-select label="dark theme" :options="themeNames" v-model="darkTheme"/>
         </div>
+        <plain-shiki :lang :themes/>
     </main>
 </template>

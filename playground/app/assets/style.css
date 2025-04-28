@@ -1,28 +1,35 @@
-* {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font: inherit;
-}
+@layer primeui {
+    * {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font: inherit;
+    }
 
-*, ::before, ::after {
-    box-sizing: border-box;
+    *, ::before, ::after {
+        box-sizing: border-box;
+    }
+
+    :root {
+        --font: system-ui, -apple-system, blinkmacsystemfont, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Source Han Sans CN", sans-serif;
+    }
+
+    html.dark {
+        color-scheme: dark;
+    }
+
+    body {
+        -webkit-font-smoothing: antialiased;
+        font-family: var(--font);
+        font-size: 14px;
+        text-size-adjust: 100%;
+    }
+
+    a {
+        color: inherit;
+    }
 }
 
 :root {
-    --font: system-ui, -apple-system, blinkmacsystemfont, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Source Han Sans CN", sans-serif;
-}
-
-html.dark {
-    color-scheme: dark;
-}
-
-body {
-    -webkit-font-smoothing: antialiased;
-    text-size-adjust: 100%;
-    font-family: var(--font);
-}
-
-a {
-    color: inherit;
+    --p-list-option-padding: 0.25rem 0.5rem;
 }
