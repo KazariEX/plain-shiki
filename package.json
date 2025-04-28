@@ -2,7 +2,7 @@
   "name": "plain-shiki",
   "type": "module",
   "version": "0.2.0",
-  "packageManager": "pnpm@10.8.1",
+  "packageManager": "pnpm@10.10.0",
   "description": "Highlight your plaintext via Shiki",
   "author": "KazariEX",
   "license": "MIT",
@@ -27,23 +27,22 @@
     "dev": "tsdown -w",
     "prepack": "pnpm run build",
     "release": "bumpp --no-push -c \"release: v%s\"",
-    "test": "vitest",
-    "eslint": "eslint ."
+    "test": "vitest"
   },
   "peerDependencies": {
     "shiki": ">=1.22.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.5.1",
-    "@types/node": "^22.13.9",
-    "@zinkawaii/eslint-config": "^0.2.0",
-    "@zinkawaii/stylelint-config": "^0.3.0",
-    "@zinkawaii/tsconfig": "^0.0.1",
-    "bumpp": "^10.0.3",
-    "eslint": "^9.21.0",
-    "shiki": "^3.1.0",
-    "stylelint": "^16.15.0",
-    "tsdown": "^0.8.0",
-    "vitest": "^3.0.7"
+    "@antfu/eslint-config": "catalog:",
+    "@types/node": "catalog:",
+    "@zinkawaii/eslint-config": "catalog:",
+    "@zinkawaii/stylelint-config": "catalog:",
+    "@zinkawaii/tsconfig": "catalog:",
+    "bumpp": "catalog:",
+    "eslint": "catalog:",
+    "shiki": "catalog:",
+    "stylelint": "catalog:",
+    "tsdown": "catalog:",
+    "vitest": "catalog:"
   }
 }

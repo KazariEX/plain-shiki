@@ -6,17 +6,17 @@
     "prepare": "nuxi prepare"
   },
   "dependencies": {
-    "@vueuse/core": "^12.8.1",
-    "radix-vue": "^1.9.17",
-    "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "@vueuse/core": "catalog:",
+    "radix-vue": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:"
   },
   "devDependencies": {
-    "@nuxt/icon": "^1.10.3",
-    "@nuxtjs/color-mode": "^3.5.2",
-    "@unocss/nuxt": "^66.0.0",
-    "@vueuse/nuxt": "^12.8.1",
-    "nuxt": "^3.15.4",
-    "unocss": "^66.0.0"
+    "@nuxt/icon": "catalog:",
+    "@nuxtjs/color-mode": "catalog:",
+    "@unocss/nuxt": "catalog:",
+    "@vueuse/nuxt": "catalog:",
+    "nuxt": "catalog:",
+    "unocss": "catalog:"
   }
 }
