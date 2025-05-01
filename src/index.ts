@@ -56,8 +56,9 @@ export interface MountPlainShikiOptions {
 
 export type CreatePlainShikiReturns = ReturnType<typeof createPlainShiki>;
 
-export function createPlainShiki(shiki: HighlighterCore) {
-    const isSupported = () => "CSS" in globalThis && "highlights" in CSS;
+    return {
+        mount
+    };
 
     function mount(el: HTMLElement, options: MountPlainShikiOptions) {
         const {
@@ -178,10 +179,8 @@ export function createPlainShiki(shiki: HighlighterCore) {
             }
         }, delay);
 
-        if (isSupported()) {
-            watch && el.addEventListener("input", update);
-            update();
-        }
+        watch && el.addEventListener("input", update);
+        update();
 
         const dispose = once(() => {
             watch && el.removeEventListener("input", update);
@@ -202,13 +201,6 @@ export function createPlainShiki(shiki: HighlighterCore) {
             update
         };
     }
-
-    return {
-        get isSupported() {
-            return isSupported();
-        },
-        mount
-    };
 }
 
 function* walkTokens(loads: ColorLoad[]) {
