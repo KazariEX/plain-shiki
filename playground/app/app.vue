@@ -20,7 +20,7 @@
 
 <template>
     <header
-        flex="~ items-center justify-between"
+        flex="~ items-center justify-between gap-3 lt-sm:col"
         max-w="screen-lg"
         m="x-auto y-4"
         p="x-4"
@@ -47,8 +47,8 @@
         m="x-auto"
         p="x-4"
     >
-        <div grid="~ cols-3 gap-4">
-            <plain-select label="language" :options="langNames" v-model="lang"/>
+        <div grid="~ cols-3 gap-4 lt-sm:cols-2">
+            <plain-select grid="col-start-1 lt-sm:col-end-3" label="language" :options="langNames" v-model="lang"/>
             <plain-select label="light theme" :options="themeNames" v-model="lightTheme"/>
             <plain-select label="dark theme" :options="themeNames" v-model="darkTheme"/>
         </div>
