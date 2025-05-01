@@ -56,29 +56,29 @@ function expand(chars: string[], start: number, end: number) {
     const startOffset = chars.slice(0, start).join("\n").length;
     const endOffset = chars.slice(0, end).join("\n").length;
 
-    const left = [];
+    let left = 0;
     for (let i = start - 1, it = endOffset - 1; i < end && it >= startOffset; i--) {
         const text = chars[i];
 
         const idx = texts.lastIndexOf(text, it);
         if (idx !== -1 && idx >= startOffset) {
-            left.push(text);
+            left++;
             it = idx - 1;
         }
         else break;
     }
 
-    const right = [];
+    let right = 0;
     for (let i = end, it = startOffset; i >= start && it < endOffset; i++) {
         const text = chars[i];
 
         const idx = texts.indexOf(text, it);
         if (idx !== -1 && idx < endOffset) {
-            right.push(text);
+            right++;
             it = idx + 1;
         }
         else break;
     }
 
-    return [start - left.length, end + right.length] as const;
+    return [start - left, end + right] as const;
 }
