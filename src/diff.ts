@@ -1,22 +1,22 @@
+import type { LoadLine } from "./types";
+
 export function diff(
-    textLines: string | string[],
-    dataLines: string | unknown[],
-    getText?: (index: number) => string,
-    addition?: (index: number) => boolean
+    textLines: string[],
+    loadLines: Pick<LoadLine, "text" | "loads">[]
 ) {
     let i = 0;
     for (; i < textLines.length; i++) {
-        const text = getText?.(i) ?? dataLines[i];
-        if (textLines[i] !== text || addition?.(i)) {
+        const { text, loads } = loadLines[i] ?? {};
+        if (textLines[i] !== text || loads?.some(({ range }) => range.collapsed)) {
             break;
         }
     }
 
     let j = textLines.length - 1;
-    let k = dataLines.length - 1;
+    let k = loadLines.length - 1;
     for (; j >= 0 && k >= 0; j--, k--) {
-        const text = getText?.(k) ?? dataLines[k];
-        if (textLines[j] !== text || addition?.(k)) {
+        const { text, loads } = loadLines[k] ?? {};
+        if (textLines[j] !== text || loads?.some(({ range }) => range.collapsed)) {
             break;
         }
     }
@@ -27,38 +27,38 @@ export function diff(
     i = Math.max(0, i);
     j = Math.min(textLines.length - 1, j) + 1;
 
-    if (textLines.length === dataLines.length && i + 1 === j) {
+    if (textLines.length === loadLines.length && i + 1 === j) {
         return [i, j];
     }
-    return expand([...textLines], i, j);
+    return expand(textLines, i, j);
 }
 
-function expand(chars: string[], start: number, end: number) {
-    const side = matchTwoSides(Math.max(0, start + end - chars.length));
+function expand(lines: string[], start: number, end: number) {
+    const side = matchTwoSides(Math.max(0, start + end - lines.length));
     start -= side;
     end += side;
 
     function matchTwoSides(offset: number) {
-        const pos = chars.slice(0, start).indexOf(chars[end], offset);
+        const pos = lines.slice(0, start).indexOf(lines[end], offset);
 
         if (pos === -1) {
             return 0;
         }
         for (let j = pos, k = end; j < start - 1; k++, j++) {
-            if (chars[j + 1] !== chars[k + 1]) {
+            if (lines[j + 1] !== lines[k + 1]) {
                 return matchTwoSides(offset + 1);
             }
         }
         return start - pos;
     }
 
-    const texts = chars.join("\n");
-    const startOffset = chars.slice(0, start).join("\n").length;
-    const endOffset = chars.slice(0, end).join("\n").length;
+    const texts = lines.join("\n");
+    const startOffset = lines.slice(0, start).join("\n").length;
+    const endOffset = lines.slice(0, end).join("\n").length;
 
     let left = 0;
     for (let i = start - 1, it = endOffset - 1; i < end && it >= startOffset; i--) {
-        const text = chars[i];
+        const text = lines[i];
 
         const idx = texts.lastIndexOf(text, it);
         if (idx !== -1 && idx >= startOffset) {
@@ -70,7 +70,7 @@ function expand(chars: string[], start: number, end: number) {
 
     let right = 0;
     for (let i = end, it = startOffset; i >= start && it < endOffset; i++) {
-        const text = chars[i];
+        const text = lines[i];
 
         const idx = texts.indexOf(text, it);
         if (idx !== -1 && idx < endOffset) {

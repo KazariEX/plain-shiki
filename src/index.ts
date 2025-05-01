@@ -125,12 +125,7 @@ export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturn
             const textLines = innerText.split("\n");
             const textNodes = collectTextNodes(el);
 
-            const [start, end] = diff(
-                textLines,
-                loadLines,
-                (i) => loadLines[i]?.text,
-                (i) => loadLines[i]?.loads.some(({ range }) => range.collapsed)
-            );
+            const [start, end] = diff(textLines, loadLines);
 
             const length = end - textLines.length + loadLines.length;
             const chunk = loadLines.splice(length);

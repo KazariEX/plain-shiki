@@ -80,5 +80,8 @@ it("add N lines have discontinuous sequential subset in adjacent", () => {
 });
 
 function diffWith(oldChars: string[], newChars: string[]) {
-    return diff(newChars, oldChars);
+    return diff(newChars, oldChars.map((char) => ({
+        text: char,
+        loads: []
+    })));
 }
