@@ -18,7 +18,6 @@ catalog:
   eslint: ^9.25.1
   nuxt: ^3.17.0
   primevue: ^4.3.3
-  radix-vue: ^1.9.17
   shiki: ^3.3.0
   stylelint: ^16.19.1
   tsdown: ^0.10.0

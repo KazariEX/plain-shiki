@@ -16,18 +16,12 @@
         v-bind="attrs"
         grid="~ place-items-center"
         size="9"
-        b="1 solid gray op-40 rounded-md"
+        b="1 solid slate/40 rounded-md"
         bg="transparent"
-        hover:bg="gray op-20"
+        hover:bg="slate/20"
         un-text="4.5"
         cursor="pointer"
     >
         <iconify :name="icon"/>
     </component>
 </template>
-
-<style scoped>
-    .is-checked {
-        --uno: outline outline-2 outline-primary outline-offset--1;
-    }
-</style>

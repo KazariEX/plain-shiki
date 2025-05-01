@@ -17,14 +17,8 @@
     <plain-button
         :icon
         :class="{
-            [`is-checked`]: colorMode.preference === mode
+            [`outline-(~ 2 primary offset--1)`]: colorMode.preference === mode
         }"
         @click="setColorMode"
     />
 </template>
-
-<style scoped>
-    .is-checked {
-        --uno: outline-primary outline outline-2 outline-offset--1;
-    }
-</style>

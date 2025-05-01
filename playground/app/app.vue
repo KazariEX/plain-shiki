@@ -30,7 +30,7 @@
             <span
                 p="x-1 y-.5"
                 b="rounded-1"
-                bg="primary op-20"
+                bg="primary/20"
                 font="mono"
                 text="3 primary"
             >{{ version }}</span>
