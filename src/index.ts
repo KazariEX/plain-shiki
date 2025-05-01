@@ -54,13 +54,21 @@ export interface MountPlainShikiOptions {
     delay?: number;
 }
 
-export type CreatePlainShikiReturns = ReturnType<typeof createPlainShiki>;
+export interface MountPlainShikiReturns {
+    dispose: () => boolean;
+    update: () => void;
+}
 
+export interface CreatePlainShikiReturns {
+    mount: (el: HTMLElement, options: MountPlainShikiOptions) => MountPlainShikiReturns;
+}
+
+export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturns {
     return {
         mount
     };
 
-    function mount(el: HTMLElement, options: MountPlainShikiOptions) {
+    function mount(el: HTMLElement, options: MountPlainShikiOptions): MountPlainShikiReturns {
         const {
             lang,
             themes = {
