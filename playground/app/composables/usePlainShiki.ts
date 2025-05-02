@@ -14,7 +14,10 @@ export type UsePlainShikiOptions = Omit<MountPlainShikiOptions, "lang" | "themes
     themes: MaybeRefOrGetter<Record<string, BundledTheme>>;
 };
 
-let shiki: HighlighterCore;
+let shiki: HighlighterCore | undefined;
+import.meta.hot?.on("vite:beforeUpdate", () => {
+    shiki?.dispose();
+});
 
 export default function(el: MaybeRefOrGetter<HTMLElement | null>, options: UsePlainShikiOptions) {
     const target = computed(() => toValue(el));
