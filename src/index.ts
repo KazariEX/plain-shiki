@@ -173,10 +173,10 @@ export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturn
                 loadLine.text = text;
                 loadLine.offset = offset;
 
-                const oldScopes = loadLine.lastGrammarState?.getScopes() ?? [Number.NaN];
-                const newScopes = tokenized.grammarState?.getScopes() ?? [Number.NaN];
+                const oldScopes = loadLine.lastGrammarState?.getScopes();
+                const newScopes = tokenized.grammarState?.getScopes();
+                const skip = oldScopes && newScopes && isArrayEqual(oldScopes, newScopes);
 
-                const skip = isArrayEqual(oldScopes, newScopes);
                 loadLine.lastGrammarState = tokenized.grammarState;
 
                 if (!skip) {
