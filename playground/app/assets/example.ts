@@ -8,7 +8,7 @@ import vitesseLight from "shiki/themes/vitesse-light.mjs";
 const shiki = await createHighlighterCore({
     langs: [grammarTs],
     themes: [vitesseLight, vitesseDark],
-    engine: createJavaScriptRegexEngine()
+    engine: createJavaScriptRegexEngine(),
 });
 
 const el = document.querySelector(".plain-shiki") as HTMLElement;
@@ -17,6 +17,6 @@ createPlainShiki(shiki).mount(el, {
     lang: "ts",
     themes: {
         light: "vitesse-light",
-        dark: "vitesse-dark"
-    }
+        dark: "vitesse-dark",
+    },
 });

@@ -6,7 +6,7 @@ import {
     bundledThemes,
     createHighlighterCore,
     createJavaScriptRegexEngine,
-    type HighlighterCore
+    type HighlighterCore,
 } from "shiki";
 
 export type UsePlainShikiOptions = Omit<MountPlainShikiOptions, "lang" | "themes"> & {
@@ -39,14 +39,14 @@ export default function(el: MaybeRefOrGetter<HTMLElement | null>, options: UsePl
             ctx = plain?.mount(target.value, {
                 ...options,
                 lang: lang.value,
-                themes: themes.value
+                themes: themes.value,
             });
         }
     });
 
     tryOnMounted(async () => {
         shiki ??= await createHighlighterCore({
-            engine: createJavaScriptRegexEngine()
+            engine: createJavaScriptRegexEngine(),
         });
 
         plain = createPlainShiki(shiki);

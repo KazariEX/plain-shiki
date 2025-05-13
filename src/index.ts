@@ -65,7 +65,7 @@ export interface CreatePlainShikiReturns {
 
 export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturns {
     return {
-        mount
+        mount,
     };
 
     function mount(el: HTMLElement, options: MountPlainShikiOptions): MountPlainShikiReturns {
@@ -73,13 +73,13 @@ export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturn
             lang,
             themes = {
                 light: "min-light",
-                dark: "min-dark"
+                dark: "min-dark",
             },
             defaultTheme = "light",
             selector = (theme) => `.${theme}`,
             defaultSelector = ":root",
             watch = true,
-            delay = 33.4
+            delay = 33.4,
         } = options;
 
         const stylesheet = new CSSStyleSheet();
@@ -148,7 +148,7 @@ export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturn
                     themes,
                     cssVariablePrefix: "",
                     defaultColor: false,
-                    grammarState: loadLines[i - 1]?.lastGrammarState
+                    grammarState: loadLines[i - 1]?.lastGrammarState,
                 });
 
                 const loads: ColorLoad[] = [];
@@ -201,7 +201,7 @@ export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturn
 
         return {
             dispose,
-            update
+            update,
         };
     }
 }
@@ -238,7 +238,7 @@ function createLoadLine(options: Partial<LoadLine> = {}) {
         offset: 0,
         lastGrammarState: void 0,
         loads: [],
-        ...options
+        ...options,
     } as LoadLine;
 }
 

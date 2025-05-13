@@ -10,7 +10,7 @@
     const editorEl = useTemplateRef("editor");
     usePlainShiki(editorEl, {
         lang: () => lang,
-        themes: () => themes
+        themes: () => themes,
     });
 </script>
 

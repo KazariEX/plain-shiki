@@ -17,7 +17,7 @@
     <plain-button
         :icon
         :class="{
-            [`outline-(~ 2 primary offset--1)`]: colorMode.preference === mode
+            [`outline-(~ 2 primary offset--1)`]: colorMode.preference === mode,
         }"
         @click="setColorMode"
     />

@@ -6,7 +6,7 @@
 
     const attrs = computed(() => (as === "a" ? {
         rel: "noopener noreferrer",
-        target: "_blank"
+        target: "_blank",
     } : {}));
 </script>
 
@@ -16,7 +16,7 @@
         v-bind="attrs"
         grid="~ place-items-center"
         size="9"
-        b="1 solid slate/40 rounded-md"
+        b="~ solid slate/40 rounded-md"
         bg="transparent"
         hover:bg="slate/20"
         un-text="4.5"

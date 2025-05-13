@@ -1,9 +1,9 @@
 <script lang="ts" setup>
     import { type BundledLanguage, bundledLanguages, type BundledTheme, bundledThemes } from "shiki";
-    import pkg from "../../package.json";
+    import * as packageJson from "../../package.json";
 
-    const repository = new URL(pkg.repository, "https://github.com").href;
-    const version = "v" + pkg.version;
+    const repository = new URL(packageJson.repository, "https://github.com").href;
+    const version = "v" + packageJson.version;
 
     const langNames = Object.keys(bundledLanguages).sort((a, b) => a.localeCompare(b));
     const themeNames = Object.keys(bundledThemes).sort((a, b) => a.localeCompare(b));
@@ -14,7 +14,7 @@
 
     const themes = computed(() => ({
         light: lightTheme.value,
-        dark: darkTheme.value
+        dark: darkTheme.value,
     }));
 </script>
 
@@ -28,7 +28,7 @@
         <hgroup flex="~ gap-2 items-center">
             <h1 font="bold" text="5">Plain Shiki Playground</h1>
             <span
-                p="x-1 y-.5"
+                p="x-1 y-0.5"
                 b="rounded-1"
                 bg="primary/20"
                 font="mono"

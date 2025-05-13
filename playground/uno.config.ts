@@ -3,14 +3,14 @@ import { defineConfig, presetAttributify, presetWind3, transformerVariantGroup }
 export default defineConfig({
     presets: [
         presetAttributify(),
-        presetWind3()
+        presetWind3(),
     ],
     theme: {
         colors: {
-            primary: "hsl(154deg 32% 46%)"
-        }
+            primary: "hsl(154deg 32% 46%)",
+        },
     },
     transformers: [
-        transformerVariantGroup()
-    ]
+        transformerVariantGroup(),
+    ],
 });

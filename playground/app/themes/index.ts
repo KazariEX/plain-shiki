@@ -14,15 +14,15 @@ const preset = definePreset(Aura, {
             700: "{green.700}",
             800: "{green.800}",
             900: "{green.900}",
-            950: "{green.950}"
-        }
-    }
+            950: "{green.950}",
+        },
+    },
 });
 
 export default {
     preset,
     options: {
         cssLayer: true,
-        darkModeSelector: ".dark"
-    }
+        darkModeSelector: ".dark",
+    },
 };

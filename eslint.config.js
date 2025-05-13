@@ -10,6 +10,6 @@ export default antfu({
         ...zin.stylistic,
         ...zin.vue,
         ...zin.patch,
-        "unicorn/prefer-dom-node-text-content": "off"
-    }
+        "unicorn/prefer-dom-node-text-content": "off",
+    },
 });

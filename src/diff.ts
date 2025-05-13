@@ -2,7 +2,7 @@ import type { LoadLine } from "./types";
 
 export function diff(
     textLines: string[],
-    loadLines: Pick<LoadLine, "text" | "loads">[]
+    loadLines: Pick<LoadLine, "text" | "loads">[],
 ) {
     let i = 0;
     for (; i < textLines.length; i++) {
