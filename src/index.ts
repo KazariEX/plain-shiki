@@ -143,7 +143,7 @@ export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturn
             for (let i = start; i < textLines.length; i++) {
                 const text = textLines[i];
 
-                const tokenResult = shiki.codeToTokens(text, {
+                const tokenized = shiki.codeToTokens(text, {
                     lang,
                     themes,
                     cssVariablePrefix: "",
@@ -152,7 +152,11 @@ export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturn
                 });
 
                 const loads: ColorLoad[] = [];
-                for (const token of tokenResult.tokens[0]) {
+                for (const token of tokenized.tokens[0]) {
+                    if (!token.content.trim().length) {
+                        continue;
+                    }
+
                     const [startNode, startOffset] = findNodeAndOffset(offset + token.offset);
                     const [endNode, endOffset] = findNodeAndOffset(offset + token.offset + token.content.length);
 
@@ -170,10 +174,10 @@ export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturn
                 loadLine.offset = offset;
 
                 const oldScopes = loadLine.lastGrammarState?.getScopes() ?? [Number.NaN];
-                const newScopes = tokenResult.grammarState?.getScopes() ?? [Number.NaN];
+                const newScopes = tokenized.grammarState?.getScopes() ?? [Number.NaN];
 
                 const skip = isArrayEqual(oldScopes, newScopes);
-                loadLine.lastGrammarState = tokenResult.grammarState;
+                loadLine.lastGrammarState = tokenized.grammarState;
 
                 if (!skip) {
                     offset += text.length + 1;
