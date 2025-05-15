@@ -1,4 +1,4 @@
-import { createPlainShiki, type CreatePlainShikiReturns, type MountPlainShikiOptions } from "plain-shiki";
+import { createPlainShiki, type MountPlainShikiOptions, type MountPlainShikiReturns, type PlainShiki } from "plain-shiki";
 import {
     type BundledLanguage,
     bundledLanguages,
@@ -24,8 +24,8 @@ export default function(el: MaybeRefOrGetter<HTMLElement | null>, options: UsePl
     const lang = toRef(options.lang);
     const themes = toRef(options.themes);
 
-    let plain: CreatePlainShikiReturns;
-    let ctx: ReturnType<(typeof plain)["mount"]>;
+    let plain: PlainShiki;
+    let ctx: MountPlainShikiReturns;
 
     const { trigger } = watchTriggerable([target, lang, themes], async () => {
         ctx?.dispose();

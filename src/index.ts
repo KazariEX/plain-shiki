@@ -59,11 +59,11 @@ export interface MountPlainShikiReturns {
     update: () => void;
 }
 
-export interface CreatePlainShikiReturns {
+export interface PlainShiki {
     mount: (el: HTMLElement, options: MountPlainShikiOptions) => MountPlainShikiReturns;
 }
 
-export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturns {
+export function createPlainShiki(shiki: HighlighterCore): PlainShiki {
     return {
         mount,
     };
