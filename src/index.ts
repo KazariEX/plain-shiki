@@ -1,7 +1,7 @@
-import type { BundledLanguage, BundledTheme, CodeToTokensWithThemesOptions, HighlighterCore } from "shiki";
+import type { BundledLanguage, BundledTheme, CodeToTokensWithThemesOptions, HighlighterCore, ThemedToken } from "shiki";
 import { diff } from "./diff";
 import { isArrayEqual, once, throttle } from "./utils";
-import type { ColorInfo, ColorLoad, LoadLine } from "./types";
+import type { ColorInfo, LoadLine } from "./types";
 
 export interface MountPlainShikiOptions {
     /**
@@ -151,7 +151,9 @@ export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturn
                     grammarState: loadLines[i - 1]?.lastGrammarState,
                 });
 
-                const loads: ColorLoad[] = [];
+                const ranges: Range[] = [];
+                const info: ColorInfo[] = [];
+
                 for (const token of tokenized.tokens[0]) {
                     if (!token.content.trim().length) {
                         continue;
@@ -163,16 +165,17 @@ export function createPlainShiki(shiki: HighlighterCore): CreatePlainShikiReturn
                     const range = document.createRange();
                     range.setStart(startNode, startOffset);
                     range.setEnd(endNode, endOffset);
-                    loads.push({ token, range });
+                    ranges.push(range);
+
+                    info.push(...createColorInfo(token, range));
                 }
 
                 const loadLine = loadLines[i] ??= createLoadLine();
-                const info = createColorInfo(loads);
 
                 patch(info, loadLine.info);
                 loadLine.text = text;
                 loadLine.offset = offset;
-                loadLine.loads = loads;
+                loadLine.ranges = ranges;
                 loadLine.info = info;
 
                 const oldScopes = loadLine.lastGrammarState?.getScopes();
@@ -228,27 +231,23 @@ function createLoadLine(options: Partial<LoadLine> = {}) {
         text: "",
         offset: 0,
         lastGrammarState: void 0,
-        loads: [],
+        ranges: [],
         info: [],
         ...options,
     } as LoadLine;
 }
 
-function createColorInfo(loads: ColorLoad[]) {
-    const info: ColorInfo[] = [];
-    for (const { token, range } of loads) {
-        if (typeof token.htmlStyle !== "object") {
-            continue;
-        }
-
-        for (const theme in token.htmlStyle) {
-            const color = token.htmlStyle[theme];
-            const name = `shiki-${theme}-${color.slice(1).toLowerCase()}`;
-
-            info.push({ range, color, theme, name });
-        }
+function* createColorInfo(token: ThemedToken, range: Range) {
+    if (typeof token.htmlStyle !== "object") {
+        return;
     }
-    return info;
+
+    for (const theme in token.htmlStyle) {
+        const color = token.htmlStyle[theme];
+        const name = `shiki-${theme}-${color.slice(1).toLowerCase()}`;
+
+        yield { range, color, theme, name };
+    }
 }
 
 function createFindNodeAndOffset(innerText: string, textNodes: Text[], initialOffset: number) {

@@ -1,16 +1,11 @@
-import type { GrammarState, ThemedToken } from "shiki";
+import type { GrammarState } from "shiki";
 
 export interface LoadLine {
     text: string;
     offset: number;
     lastGrammarState: GrammarState | undefined;
-    loads: ColorLoad[];
+    ranges: Range[];
     info: ColorInfo[];
-}
-
-export interface ColorLoad {
-    token: ThemedToken;
-    range: Range;
 }
 
 export interface ColorInfo {

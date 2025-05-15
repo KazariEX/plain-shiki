@@ -2,12 +2,12 @@ import type { LoadLine } from "./types";
 
 export function diff(
     textLines: string[],
-    loadLines: Pick<LoadLine, "text" | "loads">[],
+    loadLines: Pick<LoadLine, "text" | "ranges">[],
 ) {
     let i = 0;
     for (; i < textLines.length; i++) {
-        const { text, loads } = loadLines[i] ?? {};
-        if (textLines[i] !== text || loads?.some(({ range }) => range.collapsed)) {
+        const { text, ranges } = loadLines[i] ?? {};
+        if (textLines[i] !== text || ranges?.some((range) => range.collapsed)) {
             break;
         }
     }
@@ -15,8 +15,8 @@ export function diff(
     let j = textLines.length - 1;
     let k = loadLines.length - 1;
     for (; j >= 0 && k >= 0; j--, k--) {
-        const { text, loads } = loadLines[k] ?? {};
-        if (textLines[j] !== text || loads?.some(({ range }) => range.collapsed)) {
+        const { text, ranges } = loadLines[k] ?? {};
+        if (textLines[j] !== text || ranges?.some((range) => range.collapsed)) {
             break;
         }
     }
