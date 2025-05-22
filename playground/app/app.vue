@@ -44,7 +44,7 @@
     </header>
     <main
         max-w="screen-lg"
-        m="x-auto"
+        m="x-auto y-4"
         p="x-4"
     >
         <div grid="~ cols-3 gap-4 lt-sm:cols-2">

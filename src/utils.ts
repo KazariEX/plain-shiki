@@ -1,6 +1,6 @@
 export function throttle<T extends unknown[]>(func: (...args: T) => void, delay: number) {
     let start = 0;
-    let timer: NodeJS.Timeout | undefined = void 0;
+    let timer: NodeJS.Timeout | undefined;
     return function(this: unknown, ...args: T) {
         if (timer) {
             clearTimeout(timer);
