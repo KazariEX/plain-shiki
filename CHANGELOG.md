@@ -1,3 +1,27 @@
+## 0.3.0 (2025-05-14)
+
+### Performance
+
+- skip rendering of empty tokens
+
+### Refactors
+
+- remove low yield temporary update strategy
+- remove `isSupported` from returns
+- annotate the return types explicitly
+
+## 0.2.0 (2025-03-05)
+
+### Chores
+
+- update shiki to latest major version
+
+## 0.1.1 (2025-02-05)
+
+### Chores
+
+- fix shiki version requirement
+
 ## 0.1.0 (2025-02-05)
 
 ### Chores
@@ -14,7 +38,7 @@
 ### Bug Fixes
 
 - avoid index out of bounds during temporary updates
-- should not use the end index of longer lines
+- should not use the end index of longer lines to diff
 
 ## 0.0.11 (2024-10-10)
 
