@@ -16,9 +16,6 @@ export default defineNuxtConfig({
         "~/assets/style.css",
     ],
     compatibilityDate: "2024-07-19",
-    future: {
-        compatibilityVersion: 4,
-    },
     ssr: false,
     modules: [
         "@nuxt/icon",

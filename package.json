@@ -2,7 +2,7 @@
   "name": "plain-shiki",
   "type": "module",
   "version": "0.3.0",
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.16.1",
   "description": "Highlight your plaintext via Shiki",
   "author": "KazariEX",
   "license": "MIT",
@@ -33,7 +33,6 @@
     "shiki": ">=1.22.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "catalog:",
     "@types/node": "catalog:",
     "@zinkawaii/eslint-config": "catalog:",
     "@zinkawaii/stylelint-config": "catalog:",
