@@ -1,3 +1,9 @@
+## 0.3.1 (2025-09-17)
+
+### Chores
+
+- add release workflow for trusted publishing
+
 ## 0.3.0 (2025-05-14)
 
 ### Performance

@@ -1,7 +1,7 @@
 {
   "name": "plain-shiki",
   "type": "module",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "packageManager": "pnpm@10.16.1",
   "description": "Highlight your plaintext via Shiki",
   "author": "KazariEX",
