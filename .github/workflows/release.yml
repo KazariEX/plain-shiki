@@ -1,11 +1,16 @@
-name: test
+name: release
 
 on:
-  - push
-  - pull_request
+  workflow_dispatch:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  id-token: write
 
 jobs:
-  test:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -20,5 +25,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Run Tests
-        run: pnpm run test
+      - name: Build
+        run: pnpm run build
+
+      - name: Release
+        run: pnpm publish --no-git-checks
