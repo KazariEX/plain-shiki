@@ -5,50 +5,42 @@ import type { ColorInfo, LoadLine } from "./types";
 
 export interface MountPlainShikiOptions {
     /**
-     * @description Language of the code to be highlighted.
-     *
-     * @requires
+     * Language of the code to be highlighted.
      */
     lang: BundledLanguage;
 
     /**
-     * @description Themes of the code to be highlighted.
-     *
+     * Themes of the code to be highlighted.
      * @default {light:"min-light",dark:"min-dark"}
      */
     themes?: CodeToTokensWithThemesOptions<BundledLanguage, BundledTheme>["themes"];
 
     /**
-     * @description Name of default theme.
-     *
+     * Name of default theme.
      * @default "light"
      */
     defaultTheme?: string | false;
 
     /**
-     * @description Root element selector corresponding to the theme.
-     *
+     * Root element selector corresponding to the theme.
      * @default `.${theme}`
      */
     selector?: (theme: string) => string;
 
     /**
-     * @description Root element selector with default theme.
-     *
+     * Root element selector with default theme.
      * @default ":root"
      */
     defaultSelector?: string;
 
     /**
-     * @description Whether to listen for element update events and automatic rendering.
-     *
+     * Whether to listen for element update events and automatic rendering.
      * @default true
      */
     watch?: boolean;
 
     /**
-     * @description Throttle delay in updating when `watch: true`.
-     *
+     * Throttle delay in updating when `watch: true`.
      * @default 33.4
      */
     delay?: number;
