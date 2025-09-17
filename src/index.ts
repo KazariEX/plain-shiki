@@ -88,15 +88,17 @@ export function createPlainShiki(shiki: HighlighterCore): PlainShiki {
         const colorRanges = new Map<string, Set<Range>>();
         const loadLines: LoadLine[] = [];
 
-        function patch(info: ColorInfo[], oldInfo: ColorInfo[]) {
-            for (const { range, name } of oldInfo) {
+        function erase(info: ColorInfo[]) {
+            for (const { range, name } of info) {
                 const highlight = CSS.highlights.get(name);
                 highlight?.delete(range);
 
                 const ranges = colorRanges.get(name);
                 ranges?.delete(range);
             }
+        }
 
+        function render(info: ColorInfo[]) {
             for (const { range, color, theme, name } of info) {
                 const isDefault = theme === defaultTheme;
 
@@ -125,13 +127,17 @@ export function createPlainShiki(shiki: HighlighterCore): PlainShiki {
             const textLines = innerText.split("\n");
             const textNodes = collectTextNodes(el);
 
+            // Get text change range
             const [start, end] = diff(textLines, loadLines);
 
+            // Delete old color info
             const length = end - textLines.length + loadLines.length;
             const chunk = loadLines.splice(length);
             for (let i = start; i < length; i++) {
-                patch([], loadLines[i]?.info ?? []);
+                erase(loadLines[i].info);
             }
+
+            // Fill new load lines
             const lastGrammarState = loadLines.at(-1)?.lastGrammarState;
             loadLines.length = end - 1;
             loadLines.fill(null!, start, end - 1);
@@ -140,8 +146,10 @@ export function createPlainShiki(shiki: HighlighterCore): PlainShiki {
             let offset = textLines.slice(0, start).reduce((res, text) => res + text.length + 1, 0);
             const findNodeAndOffset = createFindNodeAndOffset(innerText, textNodes, offset);
 
+            // Render text line by line
             for (let i = start; i < textLines.length; i++) {
                 const text = textLines[i];
+                const load = loadLines[i];
 
                 const tokenized = shiki.codeToTokens(text, {
                     lang,
@@ -170,19 +178,22 @@ export function createPlainShiki(shiki: HighlighterCore): PlainShiki {
                     info.push(...createColorInfo(token, range));
                 }
 
-                const loadLine = loadLines[i] ??= createLoadLine();
+                if (load) {
+                    erase(load.info);
+                }
+                render(info);
 
-                patch(info, loadLine.info);
-                loadLine.text = text;
-                loadLine.offset = offset;
-                loadLine.ranges = ranges;
-                loadLine.info = info;
-
-                const oldScopes = loadLine.lastGrammarState?.getScopes();
+                const oldScopes = load?.lastGrammarState?.getScopes();
                 const newScopes = tokenized.grammarState?.getScopes();
                 const skip = oldScopes && newScopes && isArrayEqual(oldScopes, newScopes);
 
-                loadLine.lastGrammarState = tokenized.grammarState;
+                loadLines[i] = {
+                    text,
+                    offset,
+                    lastGrammarState: tokenized.grammarState,
+                    ranges,
+                    info,
+                };
 
                 if (!skip) {
                     offset += text.length + 1;
