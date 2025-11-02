@@ -1,3 +1,9 @@
+## 0.3.2 (2025-11-02)
+
+### Bug Fixes
+
+- correct types of `lang` and `themes`
+
 ## 0.3.1 (2025-09-17)
 
 ### Chores
