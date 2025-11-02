@@ -1,4 +1,4 @@
-import type { BundledLanguage, BundledTheme, CodeToTokensWithThemesOptions, HighlighterCore, ThemedToken } from "shiki";
+import type { BundledLanguage, BundledTheme, CodeOptionsMultipleThemes, CodeToHastOptionsCommon, HighlighterCore, ThemedToken } from "shiki";
 import { diff } from "./diff";
 import { isArrayEqual, once, throttle } from "./utils";
 import type { ColorInfo, LoadLine } from "./types";
@@ -7,13 +7,13 @@ export interface MountPlainShikiOptions {
     /**
      * Language of the code to be highlighted.
      */
-    lang: BundledLanguage;
+    lang: CodeToHastOptionsCommon<BundledLanguage>["lang"];
 
     /**
      * Themes of the code to be highlighted.
      * @default {light:"min-light",dark:"min-dark"}
      */
-    themes?: CodeToTokensWithThemesOptions<BundledLanguage, BundledTheme>["themes"];
+    themes?: CodeOptionsMultipleThemes<BundledTheme>["themes"];
 
     /**
      * Name of default theme.
